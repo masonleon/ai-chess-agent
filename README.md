@@ -5,3 +5,5 @@
 `pip install python-chess`
 
 https://github.com/niklasf/python-chess
+
+https://python-chess.readthedocs.io/en/latest/#
