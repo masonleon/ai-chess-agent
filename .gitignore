@@ -389,3 +389,6 @@ dmypy.json
 .pyre/
 
 .idea/
+
+zip/
+examples/
