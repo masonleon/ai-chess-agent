@@ -166,22 +166,6 @@ class Agents:
         moves.sort(key=lambda move: move.score, reverse=True)  # sort on score
         return moves[0].uci()
 
-
-
-
-# class RandomAgent:
-#     """
-#     Random Agent player
-#     """
-#     def run(self):
-#
-#         g = Game()
-#
-#         return g.run(random_agent, random_agent, 1, "r1", "r2", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w HAha - 0 1")
-
-
-class Eval:
-
     def eval(self, board, move, my_color):
         score = 0
         ## Check some things about this move:
@@ -199,6 +183,24 @@ class Eval:
             score -= len(board.pieces(piece, not my_color)) * value
             # can also check things about the pieces position here
         return score
+
+
+
+
+# class RandomAgent:
+#     """
+#     Random Agent player
+#     """
+#     def run(self):
+#
+#         g = Game()
+#
+#         return g.run(random_agent, random_agent, 1, "r1", "r2", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w HAha - 0 1")
+
+
+# class Eval:
+
+
 
 
 
