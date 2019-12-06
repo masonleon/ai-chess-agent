@@ -390,5 +390,5 @@ dmypy.json
 
 .idea/
 
-zip/
+examples/zip/
 examples/
