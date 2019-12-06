@@ -18,13 +18,11 @@ class Game:
         else:
             return "<pre>" + str(board) + "</pre>"
 
-
     def who(self, agent):
         """
         Checks if player agent is white or black
         """
         return "White" if agent == chess.WHITE else "Black"
-
 
     def get_move(self, prompt):
         """
@@ -38,7 +36,6 @@ class Game:
         except:
             uci = None
         return uci
-
 
     def count_pieces(self, board):
         """
@@ -62,21 +59,28 @@ class Game:
 
         return num_pieces
 
-
-    def play_game(self, agent1, agent2, start_state="", visual="svg", pause=0.1):
+    def play_game(self,
+                  agent1,
+                  agent2,
+                  uci_start_state="",
+                  visual="svg",
+                  pause=0.001):
         """
         Plays a single game with two agent players
-        """
-        """
-        agentN1, agent2: functions that takes board, return uci move
-        visual: "simple" | "svg" | None
-        """
-        use_svg = (visual == "svg")
 
-        if start_state is "":
+        agentN1, agent2: functions that takes board, return uci move
+        start_state: takes in a UCi state
+        visual: "simple" | "svg" | None
+        pause: how much time in between turns (can be used to speed up animation)
+        """
+
+        # use_svg = (visual == "svg")
+        use_svg = visual
+
+        if uci_start_state is "":
             board = chess.Board()
         else:
-            board = chess.Board(start_state)
+            board = chess.Board(uci_start_state)
 
         try:
             while not board.is_game_over(claim_draw=True):
@@ -115,8 +119,15 @@ class Game:
 
         return (game_has_winner, msg, board)
 
-
-    def run(self, agent1, agent2, iterations, agent1_name, agent2_name, start_state="", visual="svg", pause=0.001):
+    def run(self,
+            agent1,
+            agent2,
+            iterations,
+            agent1_name,
+            agent2_name,
+            start_state="",
+            visual="svg",
+            pause=0.001):
         """
         "Driver" allows for two agent players to play multiple games for a provided
         number of iterations. Returns a list of scores
@@ -150,12 +161,19 @@ class Game:
 
         return scores_list
 
+class RandomAgent:
 
-class Agents:
+    def __init__(self):
+        self.name = "random_agent"
 
     def random_agent(self, board):
         move = random.choice(list(board.legal_moves))
         return move.uci()
+
+class NaiveAgent:
+
+    def __init__(self):
+        self.name = "naive_agent"
 
     def naive_agent(self, board, naive_eval):
         moves = list(board.legal_moves)
@@ -165,6 +183,7 @@ class Agents:
             move.score = naive_eval(newboard, move, board.turn)
         moves.sort(key=lambda move: move.score, reverse=True)  # sort on score
         return moves[0].uci()
+
 
     def eval(self, board, move, my_color):
         score = 0
@@ -187,6 +206,22 @@ class Agents:
 
 
 
+
+
+    # def random_agent2(self, board):
+    #     moves = list(board.legal_moves)
+    #     for move in moves:
+    #         newboard = board.copy()
+    #         # go through board and return a score
+    #         move.score = naive_eval(newboard, move, board.turn)
+    #     moves.sort(key=lambda move: move.score, reverse=True)  # sort on score
+    #
+    #     return move.uci()
+
+
+
+
+
 # class RandomAgent:
 #     """
 #     Random Agent player
@@ -199,10 +234,6 @@ class Agents:
 
 
 # class Eval:
-
-
-
-
 
 
 # df = pd.DataFrame(data=res,
@@ -230,5 +261,3 @@ class Agents:
 #              'remain_w_pieces',
 #              'remaining_b_pieces'])
 #
-
-
