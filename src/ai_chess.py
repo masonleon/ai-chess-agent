@@ -425,9 +425,9 @@ class MiniMaxAgent:
             return self.eval(board)
 
         if currentAgent:
-            return self.maxValue(board, not currentAgent, depth - 1)
+            return self.maxValue(board, not currentAgent, depth )
         else:
-            return self.minValue(board, not currentAgent, depth - 1)
+            return self.minValue(board, not currentAgent, depth )
 
     def naive_evaluation(self, board):
         """
