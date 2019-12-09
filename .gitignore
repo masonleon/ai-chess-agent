@@ -393,31 +393,6 @@ dmypy.json
 examples/zip/
 examples/
 
-/Stockfish
-/Stockfish/src/.depend
-/Stockfish/src/benchmark.o
-/Stockfish/src/bitbase.o
-/Stockfish/src/bitboard.o
-/Stockfish/src/endgame.o
-/Stockfish/src/evaluate.o
-/Stockfish/src/main.o
-/Stockfish/src/material.o
-/Stockfish/src/misc.o
-/Stockfish/src/movegen.o
-/Stockfish/src/movepick.o
-/Stockfish/src/pawns.o
-/Stockfish/src/position.o
-/Stockfish/src/psqt.o
-/Stockfish/src/search.o
-/Stockfish/src/stockfish
-/Stockfish/src/syzygy/tbprobe.o
-/src/test.pgn
-/src/test_driver-stockfish.ipynb
-/Stockfish/src/thread.o
-/Stockfish/src/timeman.o
-/Stockfish/src/tt.o
-/Stockfish/src/uci.o
-/Stockfish/src/ucioption.o
-
-
-/src/stockfish_engine
+# stockfish executables
+Stockfish/
+src/stockfish_engine/test/stockfish
