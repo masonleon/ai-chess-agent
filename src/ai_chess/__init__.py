@@ -171,6 +171,11 @@ class Game:
         agent2_name = agent2.name
         scores_list = list()
 
+        depth = None
+
+        if "minimax" in agent1_name:
+            depth = agent1.get_max_depth()
+
         for round_num in range(iterations):
             terminal_state = self.play_game(agent1.agent,
                                             agent2.agent,
@@ -186,6 +191,7 @@ class Game:
 
             result_list = (round_num + 1,
                            iterations,
+                           depth,
                            agent1_name,
                            agent2_name,
                            game_hase_winner,
