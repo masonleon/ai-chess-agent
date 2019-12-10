@@ -1,3 +1,4 @@
+import enum
 import time
 import chess
 from IPython.display import display, HTML, clear_output
@@ -170,6 +171,11 @@ class Game:
         agent2_name = agent2.name
         scores_list = list()
 
+        depth = None
+
+        if "minimax" in agent1_name:
+            depth = agent1.get_max_depth()
+
         for round_num in range(iterations):
             terminal_state = self.play_game(agent1.agent,
                                             agent2.agent,
@@ -185,6 +191,7 @@ class Game:
 
             result_list = (round_num + 1,
                            iterations,
+                           depth,
                            agent1_name,
                            agent2_name,
                            game_hase_winner,
@@ -197,194 +204,194 @@ class Game:
 
         return scores_list
 
-class PieceSquareTables(enum.Enum):
-    pawntable = [
-        0,  0,  0,  0,  0,  0,  0,  0,
-        5, 10, 10, -20, -20, 10, 10, 5,
-        5, -5, -10, 0, 0, -10, -5, 5,
-        0, 0, 0, 20, 20, 0, 0, 0,
-        5, 5, 10, 25, 25, 10, 5, 5,
-        10, 10, 20, 30, 30, 20, 10, 10,
-        50, 50, 50, 50, 50, 50, 50, 50,
-        0, 0, 0, 0, 0, 0, 0, 0]
 
-    knightstable = [
-        -50, -40, -30, -30, -30, -30, -40, -50,
-        -40, -20, 0, 5, 5, 0, -20, -40,
-        -30, 5, 10, 15, 15, 10, 5, -30,
-        -30, 0, 15, 20, 20, 15, 0, -30,
-        -30, 5, 15, 20, 20, 15, 5, -30,
-        -30, 0, 10, 15, 15, 10, 0, -30,
-        -40, -20, 0, 0, 0, 0, -20, -40,
-        -50, -40, -30, -30, -30, -30, -40, -50]
+pawntable = [
+    0,  0,  0,  0,  0,  0,  0,  0,
+    5, 10, 10, -20, -20, 10, 10, 5,
+    5, -5, -10, 0, 0, -10, -5, 5,
+    0, 0, 0, 20, 20, 0, 0, 0,
+    5, 5, 10, 25, 25, 10, 5, 5,
+    10, 10, 20, 30, 30, 20, 10, 10,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    0, 0, 0, 0, 0, 0, 0, 0]
 
-    bishopstable = [
-        -20, -10, -10, -10, -10, -10, -10, -20,
-        -10, 5, 0, 0, 0, 0, 5, -10,
-        -10, 10, 10, 10, 10, 10, 10, -10,
-        -10, 0, 10, 10, 10, 10, 0, -10,
-        -10, 5, 5, 10, 10, 5, 5, -10,
-        -10, 0, 5, 10, 10, 5, 0, -10,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -20, -10, -10, -10, -10, -10, -10, -20]
+knightstable = [
+    -50, -40, -30, -30, -30, -30, -40, -50,
+    -40, -20, 0, 5, 5, 0, -20, -40,
+    -30, 5, 10, 15, 15, 10, 5, -30,
+    -30, 0, 15, 20, 20, 15, 0, -30,
+    -30, 5, 15, 20, 20, 15, 5, -30,
+    -30, 0, 10, 15, 15, 10, 0, -30,
+    -40, -20, 0, 0, 0, 0, -20, -40,
+    -50, -40, -30, -30, -30, -30, -40, -50]
 
-    rookstable = [
-        0, 0, 0, 5, 5, 0, 0, 0,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        5, 10, 10, 10, 10, 10, 10, 5,
-        0, 0, 0, 0, 0, 0, 0, 0]
+bishopstable = [
+    -20, -10, -10, -10, -10, -10, -10, -20,
+    -10, 5, 0, 0, 0, 0, 5, -10,
+    -10, 10, 10, 10, 10, 10, 10, -10,
+    -10, 0, 10, 10, 10, 10, 0, -10,
+    -10, 5, 5, 10, 10, 5, 5, -10,
+    -10, 0, 5, 10, 10, 5, 0, -10,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -20, -10, -10, -10, -10, -10, -10, -20]
 
-    queenstable = [
-        -20, -10, -10, -5, -5, -10, -10, -20,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -10, 5, 5, 5, 5, 5, 0, -10,
-        0, 0, 5, 5, 5, 5, 0, -5,
-        -5, 0, 5, 5, 5, 5, 0, -5,
-        -10, 0, 5, 5, 5, 5, 0, -10,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -20, -10, -10, -5, -5, -10, -10, -20]
+rookstable = [
+    0, 0, 0, 5, 5, 0, 0, 0,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    5, 10, 10, 10, 10, 10, 10, 5,
+    0, 0, 0, 0, 0, 0, 0, 0]
 
-    kingstable = [
-        20, 30, 10, 0, 0, 10, 30, 20,
-        20, 20, 0, 0, 0, 0, 20, 20,
-        -10, -20, -20, -20, -20, -20, -20, -10,
-        -20, -30, -30, -40, -40, -30, -30, -20,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30]
+queenstable = [
+    -20, -10, -10, -5, -5, -10, -10, -20,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -10, 5, 5, 5, 5, 5, 0, -10,
+    0, 0, 5, 5, 5, 5, 0, -5,
+    -5, 0, 5, 5, 5, 5, 0, -5,
+    -10, 0, 5, 5, 5, 5, 0, -10,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -20, -10, -10, -5, -5, -10, -10, -20]
 
-def naive_evaluation(board, move, color):
-    """
-    naive evaluation method where score counter seed is set to 0.
+kingstable = [
+    20, 30, 10, 0, 0, 10, 30, 20,
+    20, 20, 0, 0, 0, 0, 20, 20,
+    -10, -20, -20, -20, -20, -20, -20, -10,
+    -20, -30, -30, -40, -40, -30, -30, -20,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30]
 
-    TODO source values
-    :param board: a python-chess board.
-    :return move: str representation of Universal Chess Interface (UCI) move.
-    :param color: boolean representing whether the color of the python-chess
-            agent is this agent.
-    :return: int score value.
-    """
-    # set seed to 0
-    score = 0
-    # make the move:
-    board.push(move)
-    # Now check some other things:
-    for (piece, value) in [(chess.PAWN,   100),
-                           (chess.BISHOP, 330),
-                           (chess.KING,     0),
-                           (chess.QUEEN,  900),
-                           (chess.KNIGHT, 320),
-                           (chess.ROOK,   500)]:
-        score += len(board.pieces(piece, color)) * value
-        score -= len(board.pieces(piece, not color)) * value
-        # can also check things about the pieces position here
-    return score
+# def naive_evaluation(board, move, color):
+#     """
+#     naive evaluation method where score counter seed is set to 0.
+#
+#     TODO source values
+#     :param board: a python-chess board.
+#     :return move: str representation of Universal Chess Interface (UCI) move.
+#     :param color: boolean representing whether the color of the python-chess
+#             agent is this agent.
+#     :return: int score value.
+#     """
+#     # set seed to 0
+#     score = 0
+#     # make the move:
+#     board.push(move)
+#     # Now check some other things:
+#     for (piece, value) in [(chess.PAWN,   100),
+#                            (chess.BISHOP, 330),
+#                            (chess.KING,     0),
+#                            (chess.QUEEN,  900),
+#                            (chess.KNIGHT, 320),
+#                            (chess.ROOK,   500)]:
+#         score += len(board.pieces(piece, color)) * value
+#         score -= len(board.pieces(piece, not color)) * value
+#         # can also check things about the pieces position here
+#     return score
 
-def improved_evaluation(board, move, color):
-    """
-     TODO source values
+# def improved_evaluation(board, move, color):
+#     """
+#      TODO source values
+#
+#     improved evaluation method where score counter seed is randomly set.
+#     :param board: a python-chess board.
+#     :return move: str representation of Universal Chess Interface (UCI) move.
+#     :param color: boolean representing whether the color of the python-chess
+#            agent is this agent.
+#     :return: int score value.
+#     """
+#     # set seed to random val
+#     score = random.random()
+#     # increase score if move is a capture
+#     score += 10 if board.is_capture(move) else 0
+#     # make the move:
+#     board.push(move)
+#     # Now check some other things:
+#     for (piece, value) in [(chess.PAWN,   100),
+#                            (chess.BISHOP, 330),
+#                            (chess.KING,     0),
+#                            (chess.QUEEN,  900),
+#                            (chess.KNIGHT, 320),
+#                            (chess.ROOK,   500)]:
+#         score += len(board.pieces(piece, color)) * value
+#         score -= len(board.pieces(piece, not color)) * value
+#         # can also check things about the pieces position here
+#     # increase score if move is a check
+#     score += 90 if board.is_check() else 0
+#     # increase score if move is a checkmate
+#     score += 100 if board.is_checkmate() else 0
+#     return score
 
-    improved evaluation method where score counter seed is randomly set.
-    :param board: a python-chess board.
-    :return move: str representation of Universal Chess Interface (UCI) move.
-    :param color: boolean representing whether the color of the python-chess
-           agent is this agent.
-    :return: int score value.
-    """
-    # set seed to random val
-    score = random.random()
-    # increase score if move is a capture
-    score += 10 if board.is_capture(move) else 0
-    # make the move:
-    board.push(move)
-    # Now check some other things:
-    for (piece, value) in [(chess.PAWN,   100),
-                           (chess.BISHOP, 330),
-                           (chess.KING,     0),
-                           (chess.QUEEN,  900),
-                           (chess.KNIGHT, 320),
-                           (chess.ROOK,   500)]:
-        score += len(board.pieces(piece, color)) * value
-        score -= len(board.pieces(piece, not color)) * value
-        # can also check things about the pieces position here
-    # increase score if move is a check
-    score += 90 if board.is_check() else 0
-    # increase score if move is a checkmate
-    score += 100 if board.is_checkmate() else 0
-    return score
-
-def advanced_evaluation(board, move, color):
-    """
-    advanced evaluation method uses piece-square tables.
-    :param board: a python-chess board.
-    :return move: str representation of Universal Chess Interface (UCI) move.
-    :param color: boolean representing whether the color of the python-chess
-           agent is this agent.
-    :return: int score value.
-    """
-    if board.is_checkmate():
-        if board.turn:
-            # very low score if agent is checkmated by opponent
-            return -9999
-        else:
-            # very high score if move is a checkmate
-            return 9999
-    # low score if stalemate game
-    if board.is_stalemate():
-        return 0
-    # low score if insufficient material to complete or win the game
-    if board.is_insufficient_material():
-        return 0
-
-    wp = len(board.pieces(chess.PAWN,   chess.WHITE))
-    bp = len(board.pieces(chess.PAWN,   chess.BLACK))
-    wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
-    bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
-    wb = len(board.pieces(chess.BISHOP, chess.WHITE))
-    bb = len(board.pieces(chess.BISHOP, chess.BLACK))
-    wr = len(board.pieces(chess.ROOK,   chess.WHITE))
-    br = len(board.pieces(chess.ROOK,   chess.BLACK))
-    wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
-    bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
-
-
-    # chess.PAWN,   100),
-    # (chess.BISHOP, 330),
-    # (chess.KING,     0),
-    # (chess.QUEEN,  900),
-    #  (chess.KNIGHT, 320),
-    # (chess.ROOK,   500)]:
-    material = 100 * (wp - bp) + \
-               320 * (wn - bn) + \
-               330 * (wb - bb) + \
-               500 * (wr - br) + \
-               900 * (wq - bq)
-
-    pawnsq = sum([PieceSquareTables.pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-    pawnsq = pawnsq + sum([-PieceSquareTables.pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
-
-    knightsq = sum([PieceSquareTables.knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-    knightsq = knightsq + sum([-PieceSquareTables.knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
-
-    bishopsq = sum([PieceSquareTables.bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-    bishopsq = bishopsq + sum([-PieceSquareTables.bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
-
-    rooksq = sum([PieceSquareTables.rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-    rooksq = rooksq + sum([-PieceSquareTables.rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
-
-    queensq = sum([PieceSquareTables.queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-    queensq = queensq + sum([-PieceSquareTables.queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
-
-    kingsq = sum([PieceSquareTables.kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-    kingsq = kingsq + sum([-PieceSquareTables.kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
-
-    eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
-    return eval
+# def advanced_evaluation(board, move, color):
+#     """
+#     advanced evaluation method uses piece-square tables.
+#     :param board: a python-chess board.
+#     :return move: str representation of Universal Chess Interface (UCI) move.
+#     :param color: boolean representing whether the color of the python-chess
+#            agent is this agent.
+#     :return: int score value.
+#     """
+#     if board.is_checkmate():
+#         if board.turn:
+#             # very low score if agent is checkmated by opponent
+#             return -9999
+#         else:
+#             # very high score if move is a checkmate
+#             return 9999
+#     # low score if stalemate game
+#     if board.is_stalemate():
+#         return 0
+#     # low score if insufficient material to complete or win the game
+#     if board.is_insufficient_material():
+#         return 0
+#
+#     wp = len(board.pieces(chess.PAWN,   chess.WHITE))
+#     bp = len(board.pieces(chess.PAWN,   chess.BLACK))
+#     wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
+#     bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
+#     wb = len(board.pieces(chess.BISHOP, chess.WHITE))
+#     bb = len(board.pieces(chess.BISHOP, chess.BLACK))
+#     wr = len(board.pieces(chess.ROOK,   chess.WHITE))
+#     br = len(board.pieces(chess.ROOK,   chess.BLACK))
+#     wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
+#     bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
+#
+#
+#     # chess.PAWN,   100),
+#     # (chess.BISHOP, 330),
+#     # (chess.KING,     0),
+#     # (chess.QUEEN,  900),
+#     #  (chess.KNIGHT, 320),
+#     # (chess.ROOK,   500)]:
+#     material = 100 * (wp - bp) + \
+#                320 * (wn - bn) + \
+#                330 * (wb - bb) + \
+#                500 * (wr - br) + \
+#                900 * (wq - bq)
+#
+#     pawnsq = sum([PieceSquareTables.pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
+#     pawnsq = pawnsq + sum([-PieceSquareTables.pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
+#
+#     knightsq = sum([PieceSquareTables.knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
+#     knightsq = knightsq + sum([-PieceSquareTables.knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
+#
+#     bishopsq = sum([PieceSquareTables.bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
+#     bishopsq = bishopsq + sum([-PieceSquareTables.bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
+#
+#     rooksq = sum([PieceSquareTables.rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
+#     rooksq = rooksq + sum([-PieceSquareTables.rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
+#
+#     queensq = sum([PieceSquareTables.queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
+#     queensq = queensq + sum([-PieceSquareTables.queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
+#
+#     kingsq = sum([PieceSquareTables.kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
+#     kingsq = kingsq + sum([-PieceSquareTables.kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
+#
+#     eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
+#     return eval
 
 class RandomAgent:
     """
@@ -454,16 +461,14 @@ class BaseAgent:
         base_name = "_agent"
 
         if heuristic == "naive":
-            self.name = base_name
+            self.name = heuristic + base_name
             self.eval = self.naive_evaluation
         elif heuristic == "improved":
             self.name = heuristic + base_name
-            # self.eval = self.improved_evaluation
-            self.eval = improved_evaluation
+            self.eval = self.improved_evaluation
         elif heuristic == "advanced":
             self.name = heuristic + base_name
-            # self.eval = self.advanced_evaluation
-            self.eval = advanced_evaluation
+            self.eval = self.advanced_evaluation
         self.agent = self.choice
 
     def naive_evaluation(self, board, move, color):
@@ -481,12 +486,12 @@ class BaseAgent:
         # make the move:
         board.push(move)
         # Now check some other things:
-        for (piece, value) in [(chess.PAWN, 1),
-                               (chess.BISHOP, 4),
-                               (chess.KING, 0),
-                               (chess.QUEEN, 10),
-                               (chess.KNIGHT, 5),
-                               (chess.ROOK, 3)]:
+        for (piece, value) in [(chess.PAWN,   100),
+                               (chess.BISHOP, 330),
+                               (chess.KING,     0),
+                               (chess.QUEEN,  900),
+                               (chess.KNIGHT, 320),
+                               (chess.ROOK,   500)]:
             score += len(board.pieces(piece, color)) * value
             score -= len(board.pieces(piece, not color)) * value
             # can also check things about the pieces position here
@@ -503,21 +508,85 @@ class BaseAgent:
         """
         # set seed to random val
         score = random.random()
-        score += 10 if board.is_capture(move) else 0
+        score += 50 if board.is_capture(move) else 0
         # make the move:
         board.push(move)
         # Now check some other things:
-        for (piece, value) in [(chess.PAWN, 1),
-                               (chess.BISHOP, 4),
-                               (chess.KING, 0),
-                               (chess.QUEEN, 10),
-                               (chess.KNIGHT, 5),
-                               (chess.ROOK, 3)]:
+        for (piece, value) in [(chess.PAWN,   100),
+                               (chess.BISHOP, 330),
+                               (chess.KING,     0),
+                               (chess.QUEEN,  900),
+                               (chess.KNIGHT, 320),
+                               (chess.ROOK,   500)]:
             score += len(board.pieces(piece, color)) * value
             score -= len(board.pieces(piece, not color)) * value
-            # can also check things about the pieces position here
-        score += 100 if board.is_checkmate() else 0
+
+        # check if the move puts other agent into check
+        score -= 900  if board.is_check() else 0
+        # check if the move puts other agent into checkmate
+        score += 1000 if board.is_checkmate() else 0
         return score
+
+    def advanced_evaluation(self, board, move, color):
+        """
+        advanced evaluation method uses piece-square tables.
+        :param board: a python-chess board.
+        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param color: boolean representing whether the color of the python-chess
+               agent is this agent.
+        :return: int score value.
+        """
+        if board.is_checkmate():
+            if board.turn:
+                # very low score if agent is checkmated by opponent
+                return -9999
+            else:
+                # very high score if move is a checkmate
+                return 9999
+        # low score if stalemate game
+        if board.is_stalemate():
+            return 0
+        # low score if insufficient material to complete or win the game
+        if board.is_insufficient_material():
+            return 0
+
+        wp = len(board.pieces(chess.PAWN,   chess.WHITE))
+        bp = len(board.pieces(chess.PAWN,   chess.BLACK))
+        wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
+        bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
+        wb = len(board.pieces(chess.BISHOP, chess.WHITE))
+        bb = len(board.pieces(chess.BISHOP, chess.BLACK))
+        wr = len(board.pieces(chess.ROOK,   chess.WHITE))
+        br = len(board.pieces(chess.ROOK,   chess.BLACK))
+        wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
+        bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
+
+        material = 100 * (wp - bp) + \
+                   320 * (wn - bn) + \
+                   330 * (wb - bb) + \
+                   500 * (wr - br) + \
+                   900 * (wq - bq)
+
+        pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
+        pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
+
+        knightsq = sum([knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
+        knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
+
+        bishopsq = sum([bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
+        bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
+
+        rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
+        rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
+
+        queensq = sum([queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
+        queensq = queensq + sum([-queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
+
+        kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
+        kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
+
+        eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
+        return eval
 
     def choice(self, board):
         """
@@ -538,7 +607,7 @@ class MiniMaxAgent:
     Mini-Max Agent class.
     """
 
-    def __init__(self, max_depth=1, heuristic="naive"):
+    def __init__(self, max_depth=1, heuristic="naive", type="minimax"):
         """
         mini max agent constructor.
         :param max_depth: int maximum state search depth.
@@ -546,18 +615,141 @@ class MiniMaxAgent:
            default is "naive"
            options: "naive" | "improved"
         """
-
         self._max_depth = max_depth
         self.heuristic = heuristic
-        base_name = "minimax_agent"
+        self.type = type
 
-        # if heuristic == "naive":
-        #     self.name = heuristic + "_" + base_name
-        #     self.eval = self.naive_evaluation
-        # elif heuristic == "improved":
-        #     self.name = heuristic + "_" + base_name
-        #     self.eval = self.improved_evaluation1
-        # self.agent = self.choice
+        base_name = "_minimax_agent"
+
+        if type == "minimax":
+            self.name = base_name
+            if heuristic == "naive":
+                self.name = heuristic + self.name
+                self.eval = self.naive_evaluation
+            elif heuristic == "improved":
+                self.name = heuristic + self.name
+                self.eval = self.improved_evaluation
+            elif heuristic == "advanced":
+                self.name = heuristic + self.name
+                self.eval = self.advanced_evaluation
+            self.agent = self.minimax_choice
+
+        elif type == "alpha-beta":
+            self.name = type + base_name
+
+            if heuristic == "naive":
+                self.name = heuristic + "_" + self.name
+                self.eval = self.naive_evaluation
+            elif heuristic == "improved":
+                self.name = heuristic + "_" + self.name
+                self.eval = self.improved_evaluation
+            elif heuristic == "advanced":
+                self.name = heuristic + "_" + self.name
+                self.eval = self.advanced_evaluation
+            self.agent = self.alphabeta_choice
+
+
+    def naive_evaluation(self, board):
+        """
+        naive evaluation method where score counter seed is set to 0.
+        :param board: a python-chess board.
+        :return: int score value.
+        """
+        score = 0
+        for (piece, value) in [(chess.PAWN, 100),
+                               (chess.BISHOP, 330),
+                               (chess.KING, 0),
+                               (chess.QUEEN, 900),
+                               (chess.KNIGHT, 320),
+                               (chess.ROOK, 500)]:
+            score += len(board.pieces(piece, True)) * value
+            score -= len(board.pieces(piece, False)) * value
+        return score
+
+    def improved_evaluation(self, board):
+        """
+        improved evaluation method where score counter seed is randomly set.
+        :param board: a python-chess board.
+        :return: int score value.
+        """
+        score = random.random()
+        # TODO
+        # score += 50 if board.is_capture() else 0
+        for (piece, value) in [(chess.PAWN, 100),
+                               (chess.BISHOP, 330),
+                               (chess.KING, 0),
+                               (chess.QUEEN, 900),
+                               (chess.KNIGHT, 320),
+                               (chess.ROOK, 500)]:
+            score += len(board.pieces(piece, True)) * value
+            score -= len(board.pieces(piece, False)) * value
+
+        # check if the move puts other agent into check
+        score -= 900 if board.is_check() else 0
+        # check if the move puts other agent into checkmate
+        score += 1000 if board.is_checkmate() else 0
+        return score
+
+    def advanced_evaluation(self, board):
+        """
+        advanced evaluation method uses piece-square tables.
+        :param board: a python-chess board.
+        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param color: boolean representing whether the color of the python-chess
+               agent is this agent.
+        :return: int score value.
+        """
+        if board.is_checkmate():
+            if board.turn:
+                # very low score if agent is checkmated by opponent
+                return -9999
+            else:
+                # very high score if move is a checkmate
+                return 9999
+        # low score if stalemate game
+        if board.is_stalemate():
+            return 0
+        # low score if insufficient material to complete or win the game
+        if board.is_insufficient_material():
+            return 0
+
+        wp = len(board.pieces(chess.PAWN,   chess.WHITE))
+        bp = len(board.pieces(chess.PAWN,   chess.BLACK))
+        wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
+        bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
+        wb = len(board.pieces(chess.BISHOP, chess.WHITE))
+        bb = len(board.pieces(chess.BISHOP, chess.BLACK))
+        wr = len(board.pieces(chess.ROOK,   chess.WHITE))
+        br = len(board.pieces(chess.ROOK,   chess.BLACK))
+        wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
+        bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
+
+        material = 100 * (wp - bp) + \
+                   320 * (wn - bn) + \
+                   330 * (wb - bb) + \
+                   500 * (wr - br) + \
+                   900 * (wq - bq)
+
+        pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
+        pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
+
+        knightsq = sum([knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
+        knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
+
+        bishopsq = sum([bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
+        bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
+
+        rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
+        rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
+
+        queensq = sum([queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
+        queensq = queensq + sum([-queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
+
+        kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
+        kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
+
+        eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
+        return eval
 
     def get_max_depth(self):
         """
@@ -581,7 +773,7 @@ class MiniMaxAgent:
         for move in moves:
             newboard = board.copy()
             newboard.push_uci(move.uci())
-            result = self.miniMaxDecision(newboard, not currentAgent, depth - 1)
+            result = self.minimax_decision(newboard, not currentAgent, depth - 1)
             if result > bestMove:
                 bestMove = result
         return bestMove
@@ -601,7 +793,7 @@ class MiniMaxAgent:
         for move in moves:
             newboard = board.copy()
             newboard.push_uci(move.uci())
-            result = self.miniMaxDecision(newboard, not currentAgent, depth - 1)
+            result = self.minimax_decision(newboard, not currentAgent, depth - 1)
             if result < bestMove:
                 bestMove = result
         return bestMove
@@ -621,45 +813,9 @@ class MiniMaxAgent:
         if currentAgent:
             return self.minimax_max_value(board, currentAgent, depth)
         else:
-            return self.minValue(board, not currentAgent, depth )
+            return self.minimax_min_value(board, not currentAgent, depth)
 
-    def naive_evaluation(self, board):
-        """
-        naive evaluation method where score counter seed is set to 0.
-        :param board: a python-chess board.
-        :return: int score value.
-        """
-        score = 0
-        for (piece, value) in [(chess.PAWN, 1),
-                               (chess.BISHOP, 4),
-                               (chess.KING, 0),
-                               (chess.QUEEN, 10),
-                               (chess.KNIGHT, 5),
-                               (chess.ROOK, 3)]:
-            score += len(board.pieces(piece, True)) * value
-            score -= len(board.pieces(piece, False)) * value
-        return score
-
-    def improved_evaluation(self, board):
-        """
-        improved evaluation method where score counter seed is randomly set.
-        :param board: a python-chess board.
-        :return: int score value.
-        """
-        score = random.random()
-        # score += 10 if board.is_capture(move) else 0
-        for (piece, value) in [(chess.PAWN, 1),
-                               (chess.BISHOP, 4),
-                               (chess.KING, 0),
-                               (chess.QUEEN, 10),
-                               (chess.KNIGHT, 5),
-                               (chess.ROOK, 3)]:
-            score += len(board.pieces(piece, True)) * value
-            score -= len(board.pieces(piece, False)) * value
-            # can also check things about the pieces position here
-        return score
-
-    def choice(self, board):
+    def minimax_choice(self, board):
         """
         choice selects the best move using the evaluation function.
         :param board: a python-chess board.
@@ -674,7 +830,7 @@ class MiniMaxAgent:
         moves.sort(key=lambda move: move.score, reverse=True)  # sort on score
         return moves[0].uci()
 
-    def alphabeta_max_value(self, board, move, currentAgent, depth, alpha, beta):
+    def alphabeta_max_value(self, board, currentAgent, depth, alpha, beta):
         """
         gets best move for minimizing alphabeta agent.
         :param board: a python-chess board.
@@ -689,13 +845,17 @@ class MiniMaxAgent:
         for m in moves:
             newboard = board.copy()
             newboard.push_uci(m.uci())
-            bestMove = max(bestMove, self.alphabeta_decision(newboard, m, not currentAgent, depth - 1, alpha, beta))
+
+            alpha = self.alpha
+            beta = self.beta
+
+            bestMove = max(bestMove, self.alphabeta_decision(newboard, not currentAgent, depth - 1, alpha, beta))
             if bestMove >= beta:
                 return bestMove
-            alpha = max(alpha, bestMove)
+            self.alpha = max(alpha, bestMove)
         return bestMove
 
-    def alphabeta_min_value(self, board, move, currentAgent, depth, alpha, beta):
+    def alphabeta_min_value(self, board, currentAgent, depth, alpha, beta):
         """
         gets best move for maximizing alphabeta agent.
         :param board: a python-chess board.
@@ -710,19 +870,21 @@ class MiniMaxAgent:
         for m in moves:
             newboard = board.copy()
             newboard.push_uci(m.uci())
-            bestMove = min(bestMove, self.alphabeta_decision(newboard, m, not currentAgent, depth - 1, alpha, beta))
+
+            alpha = self.alpha
+            beta = self.beta
+
+            bestMove = min(bestMove, self.alphabeta_decision(newboard, not currentAgent, depth - 1, alpha, beta))
             if bestMove <= alpha:
                 return bestMove
-            beta = min(beta, bestMove)
+            self.beta = min(self.beta, bestMove)
         return bestMove
 
-    def alphabeta_decision(self, board, move, currentAgent, depth, alpha, beta):
+    def alphabeta_decision(self, board, currentAgent, depth, alpha, beta):
         """
         recursively searches minimax state tree to a certain depth for best move
         eliminating unnecessary costly explorations by using alpha-beta pruning.
         :param board: a python-chess board.
-        :param move: str representation of Universal Chess Interface (UCI) move
-            currently being explored.
         :param currentAgent: boolean representing whether the color of the
             python-chess agent is the current agent.
         :param depth: current depth in the search.
@@ -731,299 +893,21 @@ class MiniMaxAgent:
         :return: str representation of Universal Chess Interface (UCI) move.
         """
         if depth == 0:
-            return self.eval(board, move, currentAgent)
+            return self.eval(board)
 
         if currentAgent:
-            return self.alphabeta_max_value(board, move, currentAgent, depth, alpha, beta)
+            return self.alphabeta_max_value(board, currentAgent, depth, alpha, beta)
         else:
-            return self.alphabeta_min_value(board, move, currentAgent, depth, alpha, beta)
+            return self.alphabeta_min_value(board, currentAgent, depth, alpha, beta)
 
-##TODO alphabeta
-    # def mini_max_agent(board):
-    #     moves = list(board.legal_moves)
-    #     for move in moves:
-    #         newboard = board.copy()
-    #         newboard.push_uci(move.uci())
-    #         move.score = miniMaxDecision(newboard, False , 3, -10000,10000)
-    #     moves.sort(key=lambda move: move.score, reverse=True) # sort on score
-    #     return moves[0].uci()
-
-##TODO piecesquare table
-# pawntable = [
-#  0,  0,  0,  0,  0,  0,  0,  0,
-# 50, 50, 50, 50, 50, 50, 50, 50,
-# 10, 10, 20, 30, 30, 20, 10, 10,
-#  5,  5, 10, 25, 25, 10,  5,  5,
-#  0,  0,  0, 20, 20,  0,  0,  0,
-#  5, -5,-10,  0,  0,-10, -5,  5,
-#  5, 10, 10,-20,-20, 10, 10,  5,
-#  0,  0,  0,  0,  0,  0,  0,  0]
-#
-# knightstable = [
-# -50,-40,-30,-30,-30,-30,-40,-50,
-# -40,-20,  0,  0,  0,  0,-20,-40,
-# -30,  0, 10, 15, 15, 10,  0,-30,
-# -30,  5, 15, 20, 20, 15,  5,-30,
-# -30,  0, 15, 20, 20, 15,  0,-30,
-# -30,  5, 10, 15, 15, 10,  5,-30,
-# -40,-20,  0,  5,  5,  0,-20,-40,
-# -50,-40,-30,-30,-30,-30,-40,-50]
-#
-# bishopstable = [
-# -20,-10,-10,-10,-10,-10,-10,-20,
-# -10,  0,  0,  0,  0,  0,  0,-10,
-# -10,  0,  5, 10, 10,  5,  0,-10,
-# -10,  5,  5, 10, 10,  5,  5,-10,
-# -10,  0, 10, 10, 10, 10,  0,-10,
-# -10, 10, 10, 10, 10, 10, 10,-10,
-# -10,  5,  0,  0,  0,  0,  5,-10,
-# -20,-10,-10,-10,-10,-10,-10,-20]
-#
-# rookstable = [
-#   0,  0,  0,  0,  0,  0,  0,  0,
-#   5, 10, 10, 10, 10, 10, 10,  5,
-#  -5,  0,  0,  0,  0,  0,  0, -5,
-#  -5,  0,  0,  0,  0,  0,  0, -5,
-#  -5,  0,  0,  0,  0,  0,  0, -5,
-#  -5,  0,  0,  0,  0,  0,  0, -5,
-#  -5,  0,  0,  0,  0,  0,  0, -5,
-#   0,  0,  0,  5,  5,  0,  0,  0]
-#
-# queenstable = [
-# -20,-10,-10, -5, -5,-10,-10,-20,
-# -10,  0,  0,  0,  0,  0,  0,-10,
-# -10,  0,  5,  5,  5,  5,  0,-10,
-#  -5,  0,  5,  5,  5,  5,  0, -5,
-#   0,  0,  5,  5,  5,  5,  0, -5,
-# -10,  5,  5,  5,  5,  5,  0,-10,
-# -10,  0,  5,  0,  0,  0,  0,-10,
-# -20,-10,-10, -5, -5,-10,-10,-20]
-#
-# kingstable = [
-# -30,-40,-40,-50,-50,-40,-40,-30,
-# -30,-40,-40,-50,-50,-40,-40,-30,
-# -30,-40,-40,-50,-50,-40,-40,-30,
-# -30,-40,-40,-50,-50,-40,-40,-30,
-# -20,-30,-30,-40,-40,-30,-30,-20,
-# -10,-20,-20,-20,-20,-20,-20,-10,
-#  20, 20,  0,  0,  0,  0, 20, 20,
-#  20, 30, 10,  0,  0, 10, 30, 20]
-
-
-
-
-##TODO minimax with piece square
-# def evaluateMoves(board):
-#     if board.is_checkmate():
-#         if board.turn:
-#             return -9999
-#         else:
-#             return 9999
-#     if board.is_stalemate():
-#         return 0
-#     if board.is_insufficient_material():
-#         return 0
-#
-#     wp = len(board.pieces(chess.PAWN, chess.WHITE))
-#     bp = len(board.pieces(chess.PAWN, chess.BLACK))
-#     wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
-#     bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
-#     wb = len(board.pieces(chess.BISHOP, chess.WHITE))
-#     bb = len(board.pieces(chess.BISHOP, chess.BLACK))
-#     wr = len(board.pieces(chess.ROOK, chess.WHITE))
-#     br = len(board.pieces(chess.ROOK, chess.BLACK))
-#     wq = len(board.pieces(chess.QUEEN, chess.WHITE))
-#     bq = len(board.pieces(chess.QUEEN, chess.BLACK))
-#
-#     material = 100 * (wp - bp) + 320 * (wn - bn) + 330 * (wb - bb) + 500 * (
-#                 wr - br) + 900 * (wq - bq)
-#
-#     pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-#     pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.PAWN, chess.BLACK)])
-#     knightsq = sum(
-#         [knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-#     knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)]
-#                                for i in
-#                                board.pieces(chess.KNIGHT, chess.BLACK)])
-#     bishopsq = sum(
-#         [bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-#     bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)]
-#                                for i in
-#                                board.pieces(chess.BISHOP, chess.BLACK)])
-#     rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-#     rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.ROOK, chess.BLACK)])
-#     queensq = sum(
-#         [queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-#     queensq = queensq + sum([-queenstable[chess.square_mirror(i)]
-#                              for i in board.pieces(chess.QUEEN, chess.BLACK)])
-#     kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-#     kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.KING, chess.BLACK)])
-#
-#     eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
-#     return eval
-#     # if board.turn:
-#     #     return eval
-#     # else:
-#     #     return -eval
-
-##TODO minimax with piece square
-# def maxValue(board, currentAgent, depth,alpha,beta):
-#     bestMove = -9999
-#
-#     moves = list(board.legal_moves)
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         bestMove = max(bestMove,miniMaxDecision(newboard, not currentAgent , depth -1,alpha,beta))
-#         if bestMove >=beta :
-#           return bestMove
-#         alpha = max(alpha, bestMove)
-#     return bestMove
-
-##TODO minimax with piece square
-# def minValue(board, currentAgent, depth,alpha,beta):
-#     bestMove = 9999
-#     moves = list(board.legal_moves)
-#
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         bestMove = min(bestMove,miniMaxDecision(newboard, not currentAgent, depth -1,alpha,beta))
-#         if bestMove <= alpha:
-#           return bestMove
-#         beta = min(beta, bestMove)
-#     return bestMove
-
-##TODO minimax with piece square
-# def miniMaxDecision(board, currentAgent, depth,alpha,beta):
-#     if depth == 0 :
-#         return evaluateMoves(board)
-#
-#     if currentAgent:
-#         return maxValue(board, currentAgent, depth, alpha, beta)
-#     else:
-#         return minValue(board, currentAgent, depth, alpha, beta)
-
-##TODO minimax with piece square
-# def mini_max_agent(board):
-#     moves = list(board.legal_moves)
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         move.score = miniMaxDecision(newboard, False , 2, -10000,10000)
-#     moves.sort(key=lambda move: move.score, reverse=True) # sort on score
-#     return moves[0].uci()
-
-
-
-
-
-
-
-##TODO minimax alpha beta pruning with piece square
-# def evaluateMoves(board):
-#     if board.is_checkmate():
-#         if board.turn:
-#             return -9999
-#         else:
-#             return 9999
-#     if board.is_stalemate():
-#         return 0
-#     if board.is_insufficient_material():
-#         return 0
-#
-#     wp = len(board.pieces(chess.PAWN, chess.WHITE))
-#     bp = len(board.pieces(chess.PAWN, chess.BLACK))
-#     wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
-#     bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
-#     wb = len(board.pieces(chess.BISHOP, chess.WHITE))
-#     bb = len(board.pieces(chess.BISHOP, chess.BLACK))
-#     wr = len(board.pieces(chess.ROOK, chess.WHITE))
-#     br = len(board.pieces(chess.ROOK, chess.BLACK))
-#     wq = len(board.pieces(chess.QUEEN, chess.WHITE))
-#     bq = len(board.pieces(chess.QUEEN, chess.BLACK))
-#
-#     material = 100 * (wp - bp) + 320 * (wn - bn) + 330 * (wb - bb) + 500 * (
-#                 wr - br) + 900 * (wq - bq)
-#
-#     pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-#     pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.PAWN, chess.BLACK)])
-#     knightsq = sum(
-#         [knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-#     knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)]
-#                                for i in
-#                                board.pieces(chess.KNIGHT, chess.BLACK)])
-#     bishopsq = sum(
-#         [bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-#     bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)]
-#                                for i in
-#                                board.pieces(chess.BISHOP, chess.BLACK)])
-#     rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-#     rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.ROOK, chess.BLACK)])
-#     queensq = sum(
-#         [queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-#     queensq = queensq + sum([-queenstable[chess.square_mirror(i)]
-#                              for i in board.pieces(chess.QUEEN, chess.BLACK)])
-#     kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-#     kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)]
-#                            for i in board.pieces(chess.KING, chess.BLACK)])
-#
-#     eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
-#     return eval
-#     # if board.turn:
-#     #     return eval
-#     # else:
-#     #     return -eval
-
-##TODO minimax alpha beta pruning with piece square
-# def maxValue(board, currentAgent, depth,alpha,beta):
-#     bestMove = -9999
-#
-#     moves = list(board.legal_moves)
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         bestMove = max(bestMove,miniMaxDecision(newboard, not currentAgent , depth -1,alpha,beta))
-#         if bestMove >=beta :
-#           return bestMove
-#         alpha = max(alpha, bestMove)
-#     return bestMove
-
-##TODO minimax alpha beta pruning with piece square
-# def minValue(board, currentAgent, depth,alpha,beta):
-#     bestMove = 9999
-#     moves = list(board.legal_moves)
-#
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         bestMove = min(bestMove,miniMaxDecision(newboard, not currentAgent, depth -1,alpha,beta))
-#         if bestMove <= alpha:
-#           return bestMove
-#         beta = min(beta, bestMove)
-#     return bestMove
-
-##TODO minimax alpha beta pruning with piece square
-# def miniMaxDecision(board, currentAgent, depth,alpha,beta):
-#     if depth == 0 :
-#         return evaluateMoves(board)
-#
-#     if currentAgent:
-#         return maxValue(board, currentAgent, depth, alpha, beta)
-#     else:
-#         return minValue(board, currentAgent, depth, alpha, beta)
-
-##TODO minimax alpha beta pruning with piece square
-# def mini_max_agent(board):
-#     moves = list(board.legal_moves)
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move.uci())
-#         move.score = miniMaxDecision(newboard, False , 2, -10000,10000)
-#     moves.sort(key=lambda move: move.score, reverse=True) # sort on score
-#     return moves[0].uci()
+    def alphabeta_choice(self, board):
+        start_depth = self.get_max_depth()
+        moves = list(board.legal_moves)
+        for move in moves:
+            self.alpha = -10000
+            self.beta = 10000
+            newboard = board.copy()
+            newboard.push_uci(move.uci())
+            move.score = self.alphabeta_decision(newboard, False, start_depth, self.alpha, self.beta)
+        moves.sort(key=lambda move: move.score, reverse=True) # sort on score
+        return moves[0].uci()
