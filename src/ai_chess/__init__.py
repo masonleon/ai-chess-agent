@@ -198,66 +198,66 @@ class Game:
 
         return scores_list
 
-class PieceSquareTables(enum.Enum):
-    pawntable = [
-        0,  0,  0,  0,  0,  0,  0,  0,
-        5, 10, 10, -20, -20, 10, 10, 5,
-        5, -5, -10, 0, 0, -10, -5, 5,
-        0, 0, 0, 20, 20, 0, 0, 0,
-        5, 5, 10, 25, 25, 10, 5, 5,
-        10, 10, 20, 30, 30, 20, 10, 10,
-        50, 50, 50, 50, 50, 50, 50, 50,
-        0, 0, 0, 0, 0, 0, 0, 0]
 
-    knightstable = [
-        -50, -40, -30, -30, -30, -30, -40, -50,
-        -40, -20, 0, 5, 5, 0, -20, -40,
-        -30, 5, 10, 15, 15, 10, 5, -30,
-        -30, 0, 15, 20, 20, 15, 0, -30,
-        -30, 5, 15, 20, 20, 15, 5, -30,
-        -30, 0, 10, 15, 15, 10, 0, -30,
-        -40, -20, 0, 0, 0, 0, -20, -40,
-        -50, -40, -30, -30, -30, -30, -40, -50]
+pawntable = [
+    0,  0,  0,  0,  0,  0,  0,  0,
+    5, 10, 10, -20, -20, 10, 10, 5,
+    5, -5, -10, 0, 0, -10, -5, 5,
+    0, 0, 0, 20, 20, 0, 0, 0,
+    5, 5, 10, 25, 25, 10, 5, 5,
+    10, 10, 20, 30, 30, 20, 10, 10,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    0, 0, 0, 0, 0, 0, 0, 0]
 
-    bishopstable = [
-        -20, -10, -10, -10, -10, -10, -10, -20,
-        -10, 5, 0, 0, 0, 0, 5, -10,
-        -10, 10, 10, 10, 10, 10, 10, -10,
-        -10, 0, 10, 10, 10, 10, 0, -10,
-        -10, 5, 5, 10, 10, 5, 5, -10,
-        -10, 0, 5, 10, 10, 5, 0, -10,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -20, -10, -10, -10, -10, -10, -10, -20]
+knightstable = [
+    -50, -40, -30, -30, -30, -30, -40, -50,
+    -40, -20, 0, 5, 5, 0, -20, -40,
+    -30, 5, 10, 15, 15, 10, 5, -30,
+    -30, 0, 15, 20, 20, 15, 0, -30,
+    -30, 5, 15, 20, 20, 15, 5, -30,
+    -30, 0, 10, 15, 15, 10, 0, -30,
+    -40, -20, 0, 0, 0, 0, -20, -40,
+    -50, -40, -30, -30, -30, -30, -40, -50]
 
-    rookstable = [
-        0, 0, 0, 5, 5, 0, 0, 0,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5,
-        5, 10, 10, 10, 10, 10, 10, 5,
-        0, 0, 0, 0, 0, 0, 0, 0]
+bishopstable = [
+    -20, -10, -10, -10, -10, -10, -10, -20,
+    -10, 5, 0, 0, 0, 0, 5, -10,
+    -10, 10, 10, 10, 10, 10, 10, -10,
+    -10, 0, 10, 10, 10, 10, 0, -10,
+    -10, 5, 5, 10, 10, 5, 5, -10,
+    -10, 0, 5, 10, 10, 5, 0, -10,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -20, -10, -10, -10, -10, -10, -10, -20]
 
-    queenstable = [
-        -20, -10, -10, -5, -5, -10, -10, -20,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -10, 5, 5, 5, 5, 5, 0, -10,
-        0, 0, 5, 5, 5, 5, 0, -5,
-        -5, 0, 5, 5, 5, 5, 0, -5,
-        -10, 0, 5, 5, 5, 5, 0, -10,
-        -10, 0, 0, 0, 0, 0, 0, -10,
-        -20, -10, -10, -5, -5, -10, -10, -20]
+rookstable = [
+    0, 0, 0, 5, 5, 0, 0, 0,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    -5, 0, 0, 0, 0, 0, 0, -5,
+    5, 10, 10, 10, 10, 10, 10, 5,
+    0, 0, 0, 0, 0, 0, 0, 0]
 
-    kingstable = [
-        20, 30, 10, 0, 0, 10, 30, 20,
-        20, 20, 0, 0, 0, 0, 20, 20,
-        -10, -20, -20, -20, -20, -20, -20, -10,
-        -20, -30, -30, -40, -40, -30, -30, -20,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30,
-        -30, -40, -40, -50, -50, -40, -40, -30]
+queenstable = [
+    -20, -10, -10, -5, -5, -10, -10, -20,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -10, 5, 5, 5, 5, 5, 0, -10,
+    0, 0, 5, 5, 5, 5, 0, -5,
+    -5, 0, 5, 5, 5, 5, 0, -5,
+    -10, 0, 5, 5, 5, 5, 0, -10,
+    -10, 0, 0, 0, 0, 0, 0, -10,
+    -20, -10, -10, -5, -5, -10, -10, -20]
+
+kingstable = [
+    20, 30, 10, 0, 0, 10, 30, 20,
+    20, 20, 0, 0, 0, 0, 20, 20,
+    -10, -20, -20, -20, -20, -20, -20, -10,
+    -20, -30, -30, -40, -40, -30, -30, -20,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30,
+    -30, -40, -40, -50, -50, -40, -40, -30]
 
 # def naive_evaluation(board, move, color):
 #     """
@@ -561,23 +561,23 @@ class BaseAgent:
                    500 * (wr - br) + \
                    900 * (wq - bq)
 
-        pawnsq = sum([PieceSquareTables.pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-        pawnsq = pawnsq + sum([-PieceSquareTables.pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
+        pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
+        pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
 
-        knightsq = sum([PieceSquareTables.knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-        knightsq = knightsq + sum([-PieceSquareTables.knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
+        knightsq = sum([knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
+        knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
 
-        bishopsq = sum([PieceSquareTables.bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-        bishopsq = bishopsq + sum([-PieceSquareTables.bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
+        bishopsq = sum([bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
+        bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
 
-        rooksq = sum([PieceSquareTables.rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-        rooksq = rooksq + sum([-PieceSquareTables.rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
+        rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
+        rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
 
-        queensq = sum([PieceSquareTables.queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-        queensq = queensq + sum([-PieceSquareTables.queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
+        queensq = sum([queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
+        queensq = queensq + sum([-queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
 
-        kingsq = sum([PieceSquareTables.kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-        kingsq = kingsq + sum([-PieceSquareTables.kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
+        kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
+        kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
 
         eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
         return eval
@@ -613,20 +613,23 @@ class MiniMaxAgent:
         self.heuristic = heuristic
         self.type = type
 
-        base_name = "minimax_agent"
+        base_name = "_minimax_agent"
 
-        if type == "alpha-beta":
-            self.name = type + "_" + base_name
-
-            if heuristic == "naive":
-                self.name = heuristic + "_" + self.name
-                self.eval = self.naive_evaluation
-            elif heuristic == "improved":
-                self.name = heuristic + "_" + self.name
-                self.eval = self.improved_evaluation
-            self.agent = self.alphabeta_choice
-        elif type == "minimax":
+        if type == "minimax":
             self.name = base_name
+            if heuristic == "naive":
+                self.name = heuristic + self.name
+                self.eval = self.naive_evaluation
+            elif heuristic == "improved":
+                self.name = heuristic + self.name
+                self.eval = self.improved_evaluation
+            elif heuristic == "advanced":
+                self.name = heuristic + self.name
+                self.eval = self.advanced_evaluation
+            self.agent = self.minimax_choice
+
+        elif type == "alpha-beta":
+            self.name = type + base_name
 
             if heuristic == "naive":
                 self.name = heuristic + "_" + self.name
@@ -634,7 +637,11 @@ class MiniMaxAgent:
             elif heuristic == "improved":
                 self.name = heuristic + "_" + self.name
                 self.eval = self.improved_evaluation
-            self.agent = self.minimax_choice
+            elif heuristic == "advanced":
+                self.name = heuristic + "_" + self.name
+                self.eval = self.advanced_evaluation
+            self.agent = self.alphabeta_choice
+
 
     def naive_evaluation(self, board):
         """
@@ -681,6 +688,9 @@ class MiniMaxAgent:
         """
         advanced evaluation method uses piece-square tables.
         :param board: a python-chess board.
+        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param color: boolean representing whether the color of the python-chess
+               agent is this agent.
         :return: int score value.
         """
         if board.is_checkmate():
@@ -697,16 +707,16 @@ class MiniMaxAgent:
         if board.is_insufficient_material():
             return 0
 
-        wp = len(board.pieces(chess.PAWN, chess.WHITE))
-        bp = len(board.pieces(chess.PAWN, chess.BLACK))
+        wp = len(board.pieces(chess.PAWN,   chess.WHITE))
+        bp = len(board.pieces(chess.PAWN,   chess.BLACK))
         wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
         bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
         wb = len(board.pieces(chess.BISHOP, chess.WHITE))
         bb = len(board.pieces(chess.BISHOP, chess.BLACK))
-        wr = len(board.pieces(chess.ROOK, chess.WHITE))
-        br = len(board.pieces(chess.ROOK, chess.BLACK))
-        wq = len(board.pieces(chess.QUEEN, chess.WHITE))
-        bq = len(board.pieces(chess.QUEEN, chess.BLACK))
+        wr = len(board.pieces(chess.ROOK,   chess.WHITE))
+        br = len(board.pieces(chess.ROOK,   chess.BLACK))
+        wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
+        bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
 
         material = 100 * (wp - bp) + \
                    320 * (wn - bn) + \
@@ -714,34 +724,26 @@ class MiniMaxAgent:
                    500 * (wr - br) + \
                    900 * (wq - bq)
 
-        pawnsq = sum([PieceSquareTables.pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-        pawnsq = pawnsq + sum(
-            [-PieceSquareTables.pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
+        pawnsq = sum([pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
+        pawnsq = pawnsq + sum([-pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
 
-        knightsq = sum([PieceSquareTables.knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-        knightsq = knightsq + sum(
-            [-PieceSquareTables.knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
+        knightsq = sum([knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
+        knightsq = knightsq + sum([-knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
 
-        bishopsq = sum([PieceSquareTables.bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-        bishopsq = bishopsq + sum(
-            [-PieceSquareTables.bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
+        bishopsq = sum([bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
+        bishopsq = bishopsq + sum([-bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
 
-        rooksq = sum([PieceSquareTables.rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-        rooksq = rooksq + sum(
-            [-PieceSquareTables.rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
+        rooksq = sum([rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
+        rooksq = rooksq + sum([-rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
 
-        queensq = sum([PieceSquareTables.queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-        queensq = queensq + sum(
-            [-PieceSquareTables.queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
+        queensq = sum([queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
+        queensq = queensq + sum([-queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
 
-        kingsq = sum([PieceSquareTables.kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-        kingsq = kingsq + sum(
-            [-PieceSquareTables.kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
+        kingsq = sum([kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
+        kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
 
         eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
         return eval
-
-
 
     def get_max_depth(self):
         """
