@@ -44,7 +44,7 @@ $ sha256sum https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh
 
 ###### install package
 ```sh
-$ bash https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh`
+$ bash ~/home/<your-username>/tmp/Anaconda3-2019.10-Linux-x86_64.sh`
 ```
 - press `enter` key several times for agreement 
 - type `yes` for default install location
