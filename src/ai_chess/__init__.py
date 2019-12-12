@@ -4,6 +4,7 @@ import chess
 from IPython.display import display, HTML, clear_output
 import random
 import chess.engine
+import requests
 
 
 class Game:
@@ -77,7 +78,7 @@ class Game:
     def play_game(self,
                   agent1,
                   agent2,
-                  uci_start_state=None,
+                  board_state=None,
                   visual="svg",
                   pause=0.001):
         """
@@ -85,10 +86,10 @@ class Game:
 
         :param agent1: agent function that takes board, return uci move.
         :param agent2: agent function that takes board, return uci move.
-        :param uci_start_state: str representing an Universal Chess Interface (UCI) board state.
-                example UCI: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
+        :param board_state: str representing the board state in FEN standard.
+                example FEN: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
                default is None.
-               available options: None | '<properly formatted UCI>
+               available options: None | '<properly formatted FEN>
         :param visual: indicates if visual html animation of board active.
                default is "svg".
                available options: "svg" | "simple" | None
@@ -100,10 +101,10 @@ class Game:
 
         use_svg = (visual == "svg")
 
-        if uci_start_state is None:
+        if board_state is None:
             board = chess.Board()
         else:
-            board = chess.Board(uci_start_state)
+            board = chess.Board(board_state)
 
         try:
             while not board.is_game_over(claim_draw=True):
@@ -146,7 +147,7 @@ class Game:
             agent1,
             agent2,
             iterations,
-            uci_start_state=None,
+            board_state=None,
             visual="svg",
             pause=0.001):
         """
@@ -156,10 +157,10 @@ class Game:
         :param agent1: agent function that takes board, return uci move.
         :param agent2: agent function that takes board, return uci move.
         :param iterations: int number of game iterations.
-        :param uci_start_state: str representing an Universal Chess Interface (UCI) board state.
-                example UCI: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
+        :param board_state: str representing the board state in FEN standard.
+                example FEN: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
                default is None.
-               available options: None | '<properly formatted UCI>
+               available options: None | '<properly formatted FEN>
         :param visual: indicates if visual html animation of board active.
                default is "svg".
                available options: "svg" | "simple" | None
@@ -180,7 +181,7 @@ class Game:
         for round_num in range(iterations):
             terminal_state = self.play_game(agent1.agent,
                                             agent2.agent,
-                                            uci_start_state,
+                                            board_state,
                                             visual,
                                             pause)
 
@@ -581,8 +582,7 @@ class RandomAgent:
         captures = list()
 
         for m in moves:
-            newboard = board.copy()
-            if newboard.is_capture(m) is True:
+            if board.is_capture(m):
                 captures.append(m)
 
         if len(captures) is 0:
@@ -617,11 +617,30 @@ class BaseAgent:
             self.eval = self.advanced_evaluation
         self.agent = self.choice
 
+    def count_pieces(self, board):
+        """
+        Tallies the white and black players pieces.
+        :param board: a python-chess board.
+        :return: arr[int, int] representation of number of pieces on board where
+                arr[0] is white and arr[1] is black.
+        """
+        score = 0
+        for piece in [chess.PAWN,
+                               chess.BISHOP,
+                               chess.KING,
+                               chess.QUEEN,
+                               chess.KNIGHT,
+                               chess.ROOK]:
+            score += len(board.pieces(piece, True))
+            score += len(board.pieces(piece, False))
+
+        return score
+
     def naive_evaluation(self, board, move, color):
         """
         naive evaluation method where score counter seed is set to 0.
         :param board: a python-chess board.
-        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param move: str representation of Universal Chess Interface (UCI) move.
         :param color: boolean representing whether the color of the python-chess
                 agent is this agent.
         :return: int score value.
@@ -647,7 +666,7 @@ class BaseAgent:
         """
         improved evaluation method where score counter seed is randomly set.
         :param board: a python-chess board.
-        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param move: str representation of Universal Chess Interface (UCI) move.
         :param color: boolean representing whether the color of the python-chess
                agent is this agent.
         :return: int score value.
@@ -655,8 +674,30 @@ class BaseAgent:
         # set seed to random val
         score = random.random()
         score += 50 if board.is_capture(move) else 0
+        score -= 500 if board.is_into_check(move) else 0
         # make the move:
         board.push(move)
+        if board.is_checkmate():
+            return 9999
+        if self.count_pieces(board) <=7:
+            eval = 0
+            query = "http://tablebase.lichess.ovh/standard?fen="
+            fen = board.fen()
+            request = query + fen.replace(" ", "_")
+            r = requests.get(request)
+            if r.status_code == 429:
+                time.sleep(1)
+                request = query + fen.replace(" ", "_")
+                r = requests.get(request)
+            wdl = r.json()["wdl"]
+            if wdl is not None:
+                # wdl < 0 if the side to move is losing. This move is preferable
+                # since the opponent's side is losing
+                if wdl < 0:
+                    eval += 50
+                if wdl >= 0:
+                    eval -= 50
+            return eval
         # Now check some other things:
         for (piece, value) in [(chess.PAWN,   100),
                                (chess.BISHOP, 330),
@@ -668,33 +709,46 @@ class BaseAgent:
             score -= len(board.pieces(piece, not color)) * value
 
         # check if the move puts other agent into check
-        score -= 900  if board.is_check() else 0
-        # check if the move puts other agent into checkmate
-        score += 1000 if board.is_checkmate() else 0
+        score += 900 if board.is_check() else 0
         return score
 
     def advanced_evaluation(self, board, move, color):
         """
         advanced evaluation method uses piece-square tables.
         :param board: a python-chess board.
-        :return move: str representation of Universal Chess Interface (UCI) move.
+        :param move: str representation of Universal Chess Interface (UCI) move.
         :param color: boolean representing whether the color of the python-chess
                agent is this agent.
         :return: int score value.
         """
+        board.push(move)
         if board.is_checkmate():
-            if board.turn:
-                # very low score if agent is checkmated by opponent
-                return -9999
-            else:
-                # very high score if move is a checkmate
-                return 9999
+            return 9999
         # low score if stalemate game
         if board.is_stalemate():
             return 0
         # low score if insufficient material to complete or win the game
         if board.is_insufficient_material():
             return 0
+        if self.count_pieces(board) <= 7:
+            eval = 0
+            query = "http://tablebase.lichess.ovh/standard?fen="
+            fen = board.fen()
+            request = query + fen.replace(" ", "_")
+            r = requests.get(request)
+            if r.status_code == 429:
+                time.sleep(1)
+                request = query + fen.replace(" ", "_")
+                r = requests.get(request)
+            wdl = r.json()["wdl"]
+            if wdl is not None:
+                # wdl < 0 if the side to move is losing. This move is preferable
+                # since the opponent's side is losing
+                if wdl < 0:
+                    eval += 50
+                if wdl >= 0:
+                    eval -= 50
+            return eval
 
         wp = len(board.pieces(chess.PAWN,   chess.WHITE))
         bp = len(board.pieces(chess.PAWN,   chess.BLACK))
@@ -732,7 +786,10 @@ class BaseAgent:
         kingsq = kingsq + sum([-kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
 
         eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
-        return eval
+        if board.turn:
+            return -eval
+        else:
+            return eval
 
     def choice(self, board):
         """
@@ -794,6 +851,24 @@ class MiniMaxAgent:
                 self.eval = self.advanced_evaluation
             self.agent = self.alphabeta_choice
 
+    def count_pieces(self, board):
+        """
+        Tallies the white and black players pieces.
+        :param board: a python-chess board.
+        :return: arr[int, int] representation of number of pieces on board where
+                arr[0] is white and arr[1] is black.
+        """
+        score = 0
+        for piece in [chess.PAWN,
+                               chess.BISHOP,
+                               chess.KING,
+                               chess.QUEEN,
+                               chess.KNIGHT,
+                               chess.ROOK]:
+            score += len(board.pieces(piece, True))
+            score += len(board.pieces(piece, False))
+
+        return score
 
     def naive_evaluation(self, board):
         """
@@ -802,6 +877,26 @@ class MiniMaxAgent:
         :return: int score value.
         """
         score = 0
+        if self.count_pieces(board) <= 7:
+            eval = 0
+            query = "http://tablebase.lichess.ovh/standard?fen="
+            fen = board.fen()
+            request = query + fen.replace(" ", "_")
+            r = requests.get(request)
+            if r.status_code == 429:
+                time.sleep(1)
+                request = query + fen.replace(" ", "_")
+                r = requests.get(request)
+            wdl = r.json()["wdl"]
+            if wdl is not None:
+                # wdl < 0 if the side to move is losing. This move is preferable
+                # since the opponent's side is losing
+                if wdl < 0:
+                    eval += 50
+                if wdl >= 0:
+                    eval -= 50
+            return eval
+
         for (piece, value) in [(chess.PAWN, 100),
                                (chess.BISHOP, 330),
                                (chess.KING, 0),
@@ -818,6 +913,32 @@ class MiniMaxAgent:
         :param board: a python-chess board.
         :return: int score value.
         """
+        if board.is_checkmate():
+            if board.turn:
+                # very low score if agent is checkmated by opponent
+                return -9999
+            else:
+                # very high score if move is a checkmate
+                return 9999
+        if self.count_pieces(board) <=7:
+            eval = 0
+            query = "http://tablebase.lichess.ovh/standard?fen="
+            fen = board.fen()
+            request = query + fen.replace(" ", "_")
+            r = requests.get(request)
+            if r.status_code == 429:
+                time.sleep(1)
+                request = query + fen.replace(" ", "_")
+                r = requests.get(request)
+            wdl = r.json()["wdl"]
+            if wdl is not None:
+                # wdl < 0 if the side to move is losing. This move is preferable
+                # since the opponent's side is losing
+                if wdl < 0:
+                    eval += 50
+                if wdl >= 0:
+                    eval -= 50
+            return eval
         score = random.random()
         # TODO
         # score += 50 if board.is_capture() else 0
@@ -831,9 +952,11 @@ class MiniMaxAgent:
             score -= len(board.pieces(piece, False)) * value
 
         # check if the move puts other agent into check
-        score -= 900 if board.is_check() else 0
-        # check if the move puts other agent into checkmate
-        score += 1000 if board.is_checkmate() else 0
+        if board.is_check():
+            if board.turn:
+                score -= 900
+            else:
+                score += 900
         return score
 
     def advanced_evaluation(self, board):
@@ -858,6 +981,27 @@ class MiniMaxAgent:
         # low score if insufficient material to complete or win the game
         if board.is_insufficient_material():
             return 0
+        # When the number of pieces on the board is less than 7, the agent probes the syzygy
+        # endgame table base to get the wdl(win/draw/loss) details. This heavily reduces the
+        # computation overload on the agent
+        if self.count_pieces(board) <=7:
+            print("piece count: ",self.count_pieces(board))
+            eval =0
+            query = "http://tablebase.lichess.ovh/standard?fen="
+            fen = board.fen()
+            request = query + fen.replace(" ", "_")
+            r = requests.get(request)
+            if r.status_code == 429:
+                time.sleep(1)
+                request = query + fen.replace(" ", "_")
+                r = requests.get(request)
+            wdl = r.json()["wdl"]
+            if wdl is not None:
+                if wdl < 0:
+                    eval += 50
+                if wdl >= 0:
+                    eval -= 50
+            return eval
 
         wp = len(board.pieces(chess.PAWN,   chess.WHITE))
         bp = len(board.pieces(chess.PAWN,   chess.BLACK))
@@ -959,7 +1103,7 @@ class MiniMaxAgent:
         if currentAgent:
             return self.minimax_max_value(board, currentAgent, depth)
         else:
-            return self.minimax_min_value(board, not currentAgent, depth)
+            return self.minimax_min_value(board, currentAgent, depth)
 
     def minimax_choice(self, board):
         """
