@@ -189,6 +189,7 @@ class Game:
             moves_played = len(terminal_state[2].move_stack)
             remaining_w_pieces = self.count_pieces(terminal_state[2])[0]
             remaining_b_pieces = self.count_pieces(terminal_state[2])[1]
+            remaining_tot_pieces = remaining_w_pieces + remaining_b_pieces
 
             result_list = (round_num + 1,
                            iterations,
@@ -199,7 +200,8 @@ class Game:
                            msg,
                            moves_played,
                            remaining_w_pieces,
-                           remaining_b_pieces)
+                           remaining_b_pieces,
+                           remaining_tot_pieces)
 
             scores_list.append(result_list)
 
@@ -307,9 +309,8 @@ class Game:
         :return: Returns a list of tuples representing scores.
         """
         agent1_name = agent1.name
-        # agent2_name = agent2.name
-
-        engine_name = "chess.engine.SimpleEngine.popen_uci(\"./stockfish\")"
+        engine_name = "stockfish"
+        # engine_name = "chess.engine.SimpleEngine.popen_uci(\"./stockfish\")"
         scores_list = list()
 
         depth = None
@@ -332,6 +333,7 @@ class Game:
             moves_played = len(terminal_state[2].move_stack)
             remaining_w_pieces = self.count_pieces(terminal_state[2])[0]
             remaining_b_pieces = self.count_pieces(terminal_state[2])[1]
+            remaining_tot_pieces = remaining_w_pieces + remaining_b_pieces
 
             result_list = (round_num + 1,
                            iterations,
@@ -342,7 +344,8 @@ class Game:
                            msg,
                            moves_played,
                            remaining_w_pieces,
-                           remaining_b_pieces)
+                           remaining_b_pieces,
+                           remaining_tot_pieces)
 
             scores_list.append(result_list)
 
