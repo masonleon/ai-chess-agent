@@ -3,6 +3,7 @@ import time
 import chess
 from IPython.display import display, HTML, clear_output
 import random
+import chess.engine
 
 
 class Game:
@@ -204,6 +205,148 @@ class Game:
 
         return scores_list
 
+    def play_game_engine(self,
+                        agent1,
+                        engine_agent,
+                        uci_start_state=None,
+                        visual="svg",
+                        pause=0.001):
+        """
+        Plays a single game with two agent players.
+
+        :param agent1: agent function that takes board, return uci move.
+        :param agent2: agent function that takes board, return uci move.
+        :param uci_start_state: str representing an Universal Chess Interface (UCI) board state.
+                example UCI: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
+               default is None.
+               available options: None | '<properly formatted UCI>
+        :param visual: indicates if visual html animation of board active.
+               default is "svg".
+               available options: "svg" | "simple" | None
+        :param pause: time in between turns, can be used to speed up visual html
+               animation.
+               default is 0.001.
+        :return: tuple (game_has_winner, msg, board)
+        """
+
+        use_svg = (visual == "svg")
+
+        if uci_start_state is None:
+            board = chess.Board()
+        else:
+            board = chess.Board(uci_start_state)
+
+
+        try:
+            while not board.is_game_over(claim_draw=True):
+
+                if board.turn == chess.WHITE:
+                    uci = agent1(board)
+
+                else:
+                    result = engine_agent.play(board, chess.engine.Limit(time=0.1))
+                    uci = result.move.uci()
+
+                board.push_uci(uci)
+                name = self.who(board.turn)
+                board_stop = self.display_board(board, use_svg)
+                html = "<b>Move %s %s, Play '%s':</b><br/>%s" % (len(board.move_stack), name, uci, board_stop)
+                if visual is not None:
+                    if visual == "svg":
+                        clear_output(wait=True)
+                    display(HTML(html))
+                    if visual == "svg":
+                        time.sleep(pause)
+            engine_agent.quit()
+        except KeyboardInterrupt:
+            msg = "Game interrupted!"
+            return (False, msg, board)
+        game_has_winner = False
+        if board.is_checkmate():
+            msg = "checkmate: " + self.who(not board.turn) + " wins!"
+            game_has_winner = not board.turn
+        elif board.is_stalemate():
+            msg = "draw: stalemate"
+        elif board.is_fivefold_repetition():
+            msg = "draw: 5-fold repetition"
+        elif board.is_insufficient_material():
+            msg = "draw: insufficient material"
+        elif board.can_claim_draw():
+            msg = "draw: claim"
+        if visual is not None:
+            print(msg)
+
+        # if engine_agent:
+        #     engine_agent.quit()
+        return (game_has_winner, msg, board)
+
+    def run_engine(self,
+                    agent1,
+                    engine_path,
+                    iterations,
+                    uci_start_state=None,
+                    visual="svg",
+                    pause=0.001):
+        """
+        Driver allows for two agent players to play multiple games for a
+        provided number of iterations.
+
+        :param agent1: agent function that takes board, return uci move.
+        :param agent2: agent function that takes board, return uci move.
+        :param iterations: int number of game iterations.
+        :param uci_start_state: str representing an Universal Chess Interface (UCI) board state.
+                example UCI: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4'
+               default is None.
+               available options: None | '<properly formatted UCI>
+        :param visual: indicates if visual html animation of board active.
+               default is "svg".
+               available options: "svg" | "simple" | None
+        :param pause: time in between turns, can be used to speed up visual html
+               animation.
+               default is 0.001.
+        :return: Returns a list of tuples representing scores.
+        """
+        agent1_name = agent1.name
+        # agent2_name = agent2.name
+
+        engine_name = "chess.engine.SimpleEngine.popen_uci(\"./stockfish\")"
+        scores_list = list()
+
+        depth = None
+
+        if "minimax" in agent1_name:
+            depth = agent1.get_max_depth()
+
+        for round_num in range(iterations):
+
+            engine_agent = chess.engine.SimpleEngine.popen_uci(engine_path)
+
+            terminal_state = self.play_game_engine(agent1.agent,
+                                                    engine_agent,
+                                                    uci_start_state,
+                                                    visual,
+                                                    pause)
+
+            game_hase_winner = terminal_state[0]
+            msg = terminal_state[1]
+            moves_played = len(terminal_state[2].move_stack)
+            remaining_w_pieces = self.count_pieces(terminal_state[2])[0]
+            remaining_b_pieces = self.count_pieces(terminal_state[2])[1]
+
+            result_list = (round_num + 1,
+                           iterations,
+                           depth,
+                           agent1_name,
+                           engine_name,
+                           game_hase_winner,
+                           msg,
+                           moves_played,
+                           remaining_w_pieces,
+                           remaining_b_pieces)
+
+            scores_list.append(result_list)
+
+        return scores_list
 
 pawntable = [
     0,  0,  0,  0,  0,  0,  0,  0,
