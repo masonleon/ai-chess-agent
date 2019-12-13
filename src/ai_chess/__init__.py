@@ -213,7 +213,8 @@ class Game:
                         engine_agent,
                         uci_start_state=None,
                         visual="svg",
-                        pause=0.001):
+                        pause=0.001
+                        ):
         """
         Plays a single game with two agent players.
 
@@ -234,21 +235,26 @@ class Game:
 
         use_svg = (visual == "svg")
 
+
         if uci_start_state is None:
             board = chess.Board()
         else:
             board = chess.Board(uci_start_state)
 
+        # engine_result_data = list()
 
         try:
             while not board.is_game_over(claim_draw=True):
 
                 if board.turn == chess.WHITE:
+
                     uci = agent1(board)
 
                 else:
+
                     result = engine_agent.play(board, chess.engine.Limit(time=0.1))
                     uci = result.move.uci()
+                    # engine_result_data.append(result)
 
                 board.push_uci(uci)
                 name = self.who(board.turn)
@@ -289,7 +295,8 @@ class Game:
                     iterations,
                     uci_start_state=None,
                     visual="svg",
-                    pause=0.001):
+                    pause=0.001
+                    ):
         """
         Driver allows for two agent players to play multiple games for a
         provided number of iterations.
@@ -309,9 +316,13 @@ class Game:
                default is 0.001.
         :return: Returns a list of tuples representing scores.
         """
+        # print("game started at FEN: " + uci_start_state)
         agent1_name = agent1.name
         engine_name = "stockfish"
         # engine_name = "chess.engine.SimpleEngine.popen_uci(\"./stockfish\")"
+
+        # engine_data_dict = dict()
+
         scores_list = list()
 
         depth = None
@@ -320,14 +331,19 @@ class Game:
             depth = agent1.get_max_depth()
 
         for round_num in range(iterations):
+            # print("started round: " + str(round_num))
 
             engine_agent = chess.engine.SimpleEngine.popen_uci(engine_path)
+
+            # print("created stockfish: " + str(engine_agent))
+
 
             terminal_state = self.play_game_engine(agent1.agent,
                                                     engine_agent,
                                                     uci_start_state,
                                                     visual,
-                                                    pause)
+                                                    pause
+                                                    )
 
             game_hase_winner = terminal_state[0]
             msg = terminal_state[1]
@@ -335,6 +351,12 @@ class Game:
             remaining_w_pieces = self.count_pieces(terminal_state[2])[0]
             remaining_b_pieces = self.count_pieces(terminal_state[2])[1]
             remaining_tot_pieces = remaining_w_pieces + remaining_b_pieces
+
+            # print(terminal_state[2].halfmo)
+
+            # key = "round:" + str(round_num + 1) + "_of:" + str(iterations) + "_depth:" + str(depth) + "_agent:" + agent1_name + "_engine:" + engine_name
+
+            # engine_data_dict[key] = engine_data
 
             result_list = (round_num + 1,
                            iterations,
@@ -350,6 +372,7 @@ class Game:
 
             scores_list.append(result_list)
 
+        # return scores_list, engine_data_dict
         return scores_list
 
 pawntable = [
@@ -411,134 +434,6 @@ kingstable = [
     -30, -40, -40, -50, -50, -40, -40, -30,
     -30, -40, -40, -50, -50, -40, -40, -30,
     -30, -40, -40, -50, -50, -40, -40, -30]
-
-# def naive_evaluation(board, move, color):
-#     """
-#     naive evaluation method where score counter seed is set to 0.
-#
-#     TODO source values
-#     :param board: a python-chess board.
-#     :return move: str representation of Universal Chess Interface (UCI) move.
-#     :param color: boolean representing whether the color of the python-chess
-#             agent is this agent.
-#     :return: int score value.
-#     """
-#     # set seed to 0
-#     score = 0
-#     # make the move:
-#     board.push(move)
-#     # Now check some other things:
-#     for (piece, value) in [(chess.PAWN,   100),
-#                            (chess.BISHOP, 330),
-#                            (chess.KING,     0),
-#                            (chess.QUEEN,  900),
-#                            (chess.KNIGHT, 320),
-#                            (chess.ROOK,   500)]:
-#         score += len(board.pieces(piece, color)) * value
-#         score -= len(board.pieces(piece, not color)) * value
-#         # can also check things about the pieces position here
-#     return score
-
-# def improved_evaluation(board, move, color):
-#     """
-#      TODO source values
-#
-#     improved evaluation method where score counter seed is randomly set.
-#     :param board: a python-chess board.
-#     :return move: str representation of Universal Chess Interface (UCI) move.
-#     :param color: boolean representing whether the color of the python-chess
-#            agent is this agent.
-#     :return: int score value.
-#     """
-#     # set seed to random val
-#     score = random.random()
-#     # increase score if move is a capture
-#     score += 10 if board.is_capture(move) else 0
-#     # make the move:
-#     board.push(move)
-#     # Now check some other things:
-#     for (piece, value) in [(chess.PAWN,   100),
-#                            (chess.BISHOP, 330),
-#                            (chess.KING,     0),
-#                            (chess.QUEEN,  900),
-#                            (chess.KNIGHT, 320),
-#                            (chess.ROOK,   500)]:
-#         score += len(board.pieces(piece, color)) * value
-#         score -= len(board.pieces(piece, not color)) * value
-#         # can also check things about the pieces position here
-#     # increase score if move is a check
-#     score += 90 if board.is_check() else 0
-#     # increase score if move is a checkmate
-#     score += 100 if board.is_checkmate() else 0
-#     return score
-
-# def advanced_evaluation(board, move, color):
-#     """
-#     advanced evaluation method uses piece-square tables.
-#     :param board: a python-chess board.
-#     :return move: str representation of Universal Chess Interface (UCI) move.
-#     :param color: boolean representing whether the color of the python-chess
-#            agent is this agent.
-#     :return: int score value.
-#     """
-#     if board.is_checkmate():
-#         if board.turn:
-#             # very low score if agent is checkmated by opponent
-#             return -9999
-#         else:
-#             # very high score if move is a checkmate
-#             return 9999
-#     # low score if stalemate game
-#     if board.is_stalemate():
-#         return 0
-#     # low score if insufficient material to complete or win the game
-#     if board.is_insufficient_material():
-#         return 0
-#
-#     wp = len(board.pieces(chess.PAWN,   chess.WHITE))
-#     bp = len(board.pieces(chess.PAWN,   chess.BLACK))
-#     wn = len(board.pieces(chess.KNIGHT, chess.WHITE))
-#     bn = len(board.pieces(chess.KNIGHT, chess.BLACK))
-#     wb = len(board.pieces(chess.BISHOP, chess.WHITE))
-#     bb = len(board.pieces(chess.BISHOP, chess.BLACK))
-#     wr = len(board.pieces(chess.ROOK,   chess.WHITE))
-#     br = len(board.pieces(chess.ROOK,   chess.BLACK))
-#     wq = len(board.pieces(chess.QUEEN,  chess.WHITE))
-#     bq = len(board.pieces(chess.QUEEN,  chess.BLACK))
-#
-#
-#     # chess.PAWN,   100),
-#     # (chess.BISHOP, 330),
-#     # (chess.KING,     0),
-#     # (chess.QUEEN,  900),
-#     #  (chess.KNIGHT, 320),
-#     # (chess.ROOK,   500)]:
-#     material = 100 * (wp - bp) + \
-#                320 * (wn - bn) + \
-#                330 * (wb - bb) + \
-#                500 * (wr - br) + \
-#                900 * (wq - bq)
-#
-#     pawnsq = sum([PieceSquareTables.pawntable[i] for i in board.pieces(chess.PAWN, chess.WHITE)])
-#     pawnsq = pawnsq + sum([-PieceSquareTables.pawntable[chess.square_mirror(i)] for i in board.pieces(chess.PAWN, chess.BLACK)])
-#
-#     knightsq = sum([PieceSquareTables.knightstable[i] for i in board.pieces(chess.KNIGHT, chess.WHITE)])
-#     knightsq = knightsq + sum([-PieceSquareTables.knightstable[chess.square_mirror(i)] for i in board.pieces(chess.KNIGHT, chess.BLACK)])
-#
-#     bishopsq = sum([PieceSquareTables.bishopstable[i] for i in board.pieces(chess.BISHOP, chess.WHITE)])
-#     bishopsq = bishopsq + sum([-PieceSquareTables.bishopstable[chess.square_mirror(i)] for i in board.pieces(chess.BISHOP, chess.BLACK)])
-#
-#     rooksq = sum([PieceSquareTables.rookstable[i] for i in board.pieces(chess.ROOK, chess.WHITE)])
-#     rooksq = rooksq + sum([-PieceSquareTables.rookstable[chess.square_mirror(i)] for i in board.pieces(chess.ROOK, chess.BLACK)])
-#
-#     queensq = sum([PieceSquareTables.queenstable[i] for i in board.pieces(chess.QUEEN, chess.WHITE)])
-#     queensq = queensq + sum([-PieceSquareTables.queenstable[chess.square_mirror(i)] for i in board.pieces(chess.QUEEN, chess.BLACK)])
-#
-#     kingsq = sum([PieceSquareTables.kingstable[i] for i in board.pieces(chess.KING, chess.WHITE)])
-#     kingsq = kingsq + sum([-PieceSquareTables.kingstable[chess.square_mirror(i)] for i in board.pieces(chess.KING, chess.BLACK)])
-#
-#     eval = material + pawnsq + knightsq + bishopsq + rooksq + queensq + kingsq
-#     return eval
 
 class RandomAgent:
     """
@@ -985,10 +880,11 @@ class MiniMaxAgent:
         # endgame table base to get the wdl(win/draw/loss) details. This heavily reduces the
         # computation overload on the agent
         if self.count_pieces(board) <=7:
-            print("piece count: ",self.count_pieces(board))
+            # print("piece count: ",self.count_pieces(board))
             eval =0
             query = "http://tablebase.lichess.ovh/standard?fen="
             fen = board.fen()
+            print("White thinking about FEN: " + str(fen))
             request = query + fen.replace(" ", "_")
             r = requests.get(request)
             if r.status_code == 429:
@@ -996,6 +892,7 @@ class MiniMaxAgent:
                 request = query + fen.replace(" ", "_")
                 r = requests.get(request)
             wdl = r.json()["wdl"]
+            print("response received")
             if wdl is not None:
                 if wdl < 0:
                     eval += 50
@@ -1098,6 +995,7 @@ class MiniMaxAgent:
         :return: str representation of Universal Chess Interface (UCI) move.
         """
         if depth == 0:
+            print("made a move")
             return self.eval(board)
 
         if currentAgent:
@@ -1201,3 +1099,30 @@ class MiniMaxAgent:
             move.score = self.alphabeta_decision(newboard, False, start_depth, self.alpha, self.beta)
         moves.sort(key=lambda move: move.score, reverse=True) # sort on score
         return moves[0].uci()
+
+
+
+# def main():
+#     # game rounds per match-up
+#     NUM_ITERATIONS = 1
+#     # result stats per game for pandas dataframee
+#     COLUMNS = ['round_num', 'iterations', 'depth', 'white agent', 'black agent', 'white_victory', 'winner',
+#                'moves_played', 'remain_w_pieces', 'remaining_b_pieces', 'remaining_tot_pieces']
+#     # turn off svg animation to improve performance
+#     GRAPHICS = None
+#     # stockfish engine executable path
+#     STOCKFISH_PATH = "./../stockfish_engine/test/stockfish"
+#
+#     game = Game()
+#
+#     white = MiniMaxAgent(max_depth=1, heuristic="advanced", type="alpha-beta")
+#     black = STOCKFISH_PATH
+#
+#     results, dict = game.run_engine(white, black, NUM_ITERATIONS, visual=None)
+#
+#     print(results)
+#
+#     print(dict)
+#
+# if __name__ == "__main__":
+#     main()
