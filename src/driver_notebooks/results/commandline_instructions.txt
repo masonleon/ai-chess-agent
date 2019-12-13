@@ -1,0 +1,5 @@
+# start the notebook server
+jupyter notebook
+
+# execute the entire notebook
+jupyter nbconvert --to notebook --execute <notebook_name>.ipynb
