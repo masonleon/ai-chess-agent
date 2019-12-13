@@ -316,12 +316,8 @@ class Game:
                default is 0.001.
         :return: Returns a list of tuples representing scores.
         """
-        # print("game started at FEN: " + uci_start_state)
         agent1_name = agent1.name
         engine_name = "stockfish"
-        # engine_name = "chess.engine.SimpleEngine.popen_uci(\"./stockfish\")"
-
-        # engine_data_dict = dict()
 
         scores_list = list()
 
@@ -334,9 +330,6 @@ class Game:
             # print("started round: " + str(round_num))
 
             engine_agent = chess.engine.SimpleEngine.popen_uci(engine_path)
-
-            # print("created stockfish: " + str(engine_agent))
-
 
             terminal_state = self.play_game_engine(agent1.agent,
                                                     engine_agent,
@@ -351,8 +344,6 @@ class Game:
             remaining_w_pieces = self.count_pieces(terminal_state[2])[0]
             remaining_b_pieces = self.count_pieces(terminal_state[2])[1]
             remaining_tot_pieces = remaining_w_pieces + remaining_b_pieces
-
-            # print(terminal_state[2].halfmo)
 
             # key = "round:" + str(round_num + 1) + "_of:" + str(iterations) + "_depth:" + str(depth) + "_agent:" + agent1_name + "_engine:" + engine_name
 
@@ -372,7 +363,6 @@ class Game:
 
             scores_list.append(result_list)
 
-        # return scores_list, engine_data_dict
         return scores_list
 
 pawntable = [
@@ -880,11 +870,9 @@ class MiniMaxAgent:
         # endgame table base to get the wdl(win/draw/loss) details. This heavily reduces the
         # computation overload on the agent
         if self.count_pieces(board) <=7:
-            # print("piece count: ",self.count_pieces(board))
             eval =0
             query = "http://tablebase.lichess.ovh/standard?fen="
             fen = board.fen()
-            print("White thinking about FEN: " + str(fen))
             request = query + fen.replace(" ", "_")
             r = requests.get(request)
             if r.status_code == 429:
@@ -892,7 +880,6 @@ class MiniMaxAgent:
                 request = query + fen.replace(" ", "_")
                 r = requests.get(request)
             wdl = r.json()["wdl"]
-            print("response received")
             if wdl is not None:
                 if wdl < 0:
                     eval += 50
@@ -995,7 +982,6 @@ class MiniMaxAgent:
         :return: str representation of Universal Chess Interface (UCI) move.
         """
         if depth == 0:
-            print("made a move")
             return self.eval(board)
 
         if currentAgent:
