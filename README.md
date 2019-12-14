@@ -1,8 +1,6 @@
 # ai-chess-agent
 This project aims to create a chess playing AI agent that can rationally pick moves and win a reasonable number of times.
 
-ai-chess-agent
-
 ![](./reports/images/minimax_v_naiverand.gif)
 
 ## Installation
@@ -80,7 +78,7 @@ $ ^C
 ```
 
 #### PyCharm Professional Setup
-###### download jet-brains toolbox tarball to tmp dir 
+###### download jetbrains toolbox tarball to tmp dir 
 ```sh
 $ wget https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.16.6067.tar.gz
 ```
@@ -99,7 +97,7 @@ $ ./jetbrains-toolbox
 
 #### Version Control
 ###### setup Git
-where <name> and <email> are your username and email  
+where name and email are your username and email  
 `git config --global user.name "<name>"
 git config --global user.email "<email>"`  
 ###### setup PyCharm GitHub VCS
@@ -144,5 +142,15 @@ $ make build ARCH=x86-64 COMP=gcc
 ```
 ###### make new engine dir and copy the stockfish executable
 ```sh
-$ mkdir -p ~/PycharmProjects/ai-chess-agent/src/stockfish_engine/test && cp stockfish "$_"
+$ mkdir -p ~/PycharmProjects/ai-chess-agent/src/stockfish_engine && cp stockfish "$_"
 ```
+#### Jupyter
+###### start the server
+`cd ./src/driver_notebooks`
+jupyter notebook
+
+###### execute the entire notebook of your choice
+######## WARNING: DEPTH OF 3 TAKES A VERY LONG TIME!
+jupyter nbconvert --to notebook --execute <notebook_name>.ipynb
+
+
