@@ -1,7 +1,0 @@
-# start the notebook server
-jupyter notebook
-
-
-# WARNING: DEPTH OF 3 TAKES A VERY LONG TIME
-# execute the entire notebook
-jupyter nbconvert --to notebook --execute <notebook_name>.ipynb

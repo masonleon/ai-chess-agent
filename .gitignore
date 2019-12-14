@@ -395,4 +395,4 @@ examples/
 
 # stockfish executables
 Stockfish/
-src/stockfish_engine/test/stockfish
+src/stockfish_engine/stockfish
