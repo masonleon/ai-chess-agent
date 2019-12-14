@@ -1,7 +1,7 @@
 # ai-chess-agent
 This project aims to create a chess playing AI agent that can rationally pick moves and win a reasonable number of times using the Minimax and Minimax with Alpha-beta pruning algorithms. We use different heuristic evaluation methods to improve the performance of our agents against a random agent.
 
-Using the Stockfish engine, we demonstrate that due to the extremely large state space of chess, Minimax and Minimax with Alpha-beta pruning in their basic implimentation are not optimal approaches for an AI agent.
+Using the Stockfish engine, we demonstrate that due to the extremely large state space of chess, Minimax and Minimax with Alpha-beta pruning in their basic implementation are not optimal approaches for an AI agent.
 
 This repository is part of Mason Leon and Naveen Kumar Chiluka's final report for Dr. Lawson L.S. Wong's graduate-level Fall 2019 CS 5100: Foundations of Artificial Intelligence course at Khoury College of Computer Sciences, Northeastern University, Boston, MA.
 
