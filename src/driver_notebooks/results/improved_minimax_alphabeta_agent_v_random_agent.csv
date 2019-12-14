@@ -1,0 +1,21 @@
+,round_num,iterations,depth,white agent,black agent,white_victory,winner,moves_played,remain_w_pieces,remaining_b_pieces,remaining_tot_pieces
+0,1,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,53,15,4,19
+1,2,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,47,14,8,22
+2,3,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,41,15,7,22
+3,4,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,59,14,4,18
+4,5,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,29,16,8,24
+5,6,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,43,15,4,19
+6,7,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,47,15,6,21
+7,8,10,1,improved_minimax_agent,random_agent,False,draw: stalemate,65,15,1,16
+8,9,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,45,13,7,20
+9,10,10,1,improved_minimax_agent,random_agent,True,checkmate: White wins!,29,16,6,22
+10,1,10,2,improved_minimax_agent,random_agent,False,draw: claim,62,14,7,21
+11,2,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,13,16,15,31
+12,3,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,25,15,11,26
+13,4,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,21,16,12,28
+14,5,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,47,14,7,21
+15,6,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,55,14,6,20
+16,7,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,45,14,8,22
+17,8,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,47,16,9,25
+18,9,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,13,16,15,31
+19,10,10,2,improved_minimax_agent,random_agent,True,checkmate: White wins!,25,16,12,28

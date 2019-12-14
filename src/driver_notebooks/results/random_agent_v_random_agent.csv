@@ -1,0 +1,21 @@
+round_num,iterations,depth,white agent,black agent,white_victory,winner,moves_played,remain_w_pieces,remaining_b_pieces,remaining_tot_pieces
+1,10,,random_agent,random_agent,False,checkmate: Black wins!,82,7,11,18
+2,10,,random_agent,random_agent,False,draw: stalemate,164,1,7,8
+3,10,,random_agent,random_agent,False,draw: claim,497,2,1,3
+4,10,,random_agent,random_agent,False,draw: stalemate,266,1,6,7
+5,10,,random_agent,random_agent,False,checkmate: Black wins!,74,13,11,24
+6,10,,random_agent,random_agent,False,draw: claim,394,2,2,4
+7,10,,random_agent,random_agent,False,draw: insufficient material,416,1,2,3
+8,10,,random_agent,random_agent,False,draw: claim,410,2,3,5
+9,10,,random_agent,random_agent,False,draw: claim,297,2,3,5
+10,10,,random_agent,random_agent,False,draw: insufficient material,519,1,2,3
+1,10,,improved_random_agent,random_agent,True,checkmate: White wins!,291,9,1,10
+2,10,,improved_random_agent,random_agent,False,draw: stalemate,337,4,1,5
+3,10,,improved_random_agent,random_agent,False,draw: stalemate,149,11,1,12
+4,10,,improved_random_agent,random_agent,False,draw: stalemate,87,14,1,15
+5,10,,improved_random_agent,random_agent,False,draw: stalemate,173,10,1,11
+6,10,,improved_random_agent,random_agent,False,draw: stalemate,101,13,1,14
+7,10,,improved_random_agent,random_agent,False,draw: claim,287,7,1,8
+8,10,,improved_random_agent,random_agent,False,draw: stalemate,355,7,1,8
+9,10,,improved_random_agent,random_agent,False,draw: stalemate,173,13,1,14
+10,10,,improved_random_agent,random_agent,False,draw: stalemate,53,12,1,13
