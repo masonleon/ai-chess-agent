@@ -110,7 +110,7 @@ git config --global user.email "<email>"`
 #### Conda Environment
 ###### create env
 ```sh
-$ conda create --name ai-chess-agent python=3.7
+$ conda create --name ai-chess-agent python=3.6
 $ conda install -n ai-chess-agent numpy pandas matplotlib
 ```
 ###### configure PyCharm project interpreter
