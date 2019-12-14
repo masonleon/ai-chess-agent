@@ -1,5 +1,23 @@
 # ai-chess-agent
-This project aims to create a chess playing AI agent that can rationally pick moves and win a reasonable number of times.
+This project aims to create a chess playing AI agent that can rationally pick moves and win a reasonable number of times using the Minimax and Minimax with Alpha-beta pruning algorithms. We use different heuristic evaluation methods to improve the performance of our agents against a random agent.
+
+Using the Stockfish engine, we demonstrate that due to the extremely large state space of chess, Minimax and Minimax with Alpha-beta pruning in their basic implimentation are not optimal approaches for an AI agent.
+
+This repository is part of Mason Leon and Naveen Kumar Chiluka's final report for Dr. Lawson L.S. Wong's graduate-level Fall 2019 CS 5100: Foundations of Artificial Intelligence course at Khoury College of Computer Sciences, Northeastern University, Boston, MA.
+
+![](./reports/images/minimax_v_naiverand.gif)
+
+Before installing, you may find the following projects, libraries, and references used in this project of interest:
+- [Programming a Chess Player](https://jupyter.brynmawr.edu/services/public/dblank/CS371%20Cognitive%20Science/2016-Fall/Programming%20a%20Chess%20Player.ipynb)
+- [Stockfish](https://github.com/official-stockfish/Stockfish)
+- [Python-Chess](https://github.com/niklasf/python-chess)
+- [Syzygy endgame tablebases](https://syzygy-tables.info/)
+- [Syzygy endgame tablebase API](https://github.com/niklasf/syzygy-tables.info)
+- [lila-tablebase API](https://github.com/niklasf/lila-tablebase)
+- [Chess Programming Wiki](https://www.chessprogramming.org/)
+- [Russell And Norvig's Artificial Intelligence: A Modern Approach](http://aima.cs.berkeley.edu/)
+- [AIMA Python Implementation](https://github.com/aimacode/aima-python)
+- [AIMA Algorithm Pseudocode](https://github.com/aimacode/aima-pseudocode)
 
 ## Installation
 > OS Setup  
@@ -76,7 +94,7 @@ $ ^C
 ```
 
 #### PyCharm Professional Setup
-###### download jet-brains toolbox tarball to tmp dir 
+###### download jetbrains toolbox tarball to tmp dir 
 ```sh
 $ wget https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.16.6067.tar.gz
 ```
@@ -95,7 +113,7 @@ $ ./jetbrains-toolbox
 
 #### Version Control
 ###### setup Git
-where <name> and <email> are your username and email  
+where name and email are your username and email  
 `git config --global user.name "<name>"
 git config --global user.email "<email>"`  
 ###### setup PyCharm GitHub VCS
@@ -140,5 +158,17 @@ $ make build ARCH=x86-64 COMP=gcc
 ```
 ###### make new engine dir and copy the stockfish executable
 ```sh
-$ mkdir -p ~/PycharmProjects/ai-chess-agent/src/stockfish_engine/test && cp stockfish "$_"
+$ mkdir -p ~/PycharmProjects/ai-chess-agent/src/stockfish_engine && cp stockfish "$_"
+```
+#### Jupyter
+###### start the server
+```sh
+cd ./src/driver_notebooks
+jupyter notebook
+```
+
+###### execute the entire notebook of your choice
+NOTE: DEPTH OF 3 TAKES A VERY LONG TIME!
+```sh
+jupyter nbconvert --to notebook --execute <notebook_name>.ipynb
 ```
