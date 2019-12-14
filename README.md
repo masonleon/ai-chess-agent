@@ -1,6 +1,10 @@
 # ai-chess-agent
 This project aims to create a chess playing AI agent that can rationally pick moves and win a reasonable number of times.
 
+ai-chess-agent
+
+![](./reports/images/minimax_v_naiverand.gif)
+
 ## Installation
 > OS Setup  
 > Anaconda Setup  
