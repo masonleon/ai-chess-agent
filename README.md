@@ -168,7 +168,7 @@ jupyter notebook
 ```
 
 ###### execute the entire notebook of your choice
-######## NOTE: DEPTH OF 3 TAKES A VERY LONG TIME!
+NOTE: DEPTH OF 3 TAKES A VERY LONG TIME!
 ```sh
 jupyter nbconvert --to notebook --execute <notebook_name>.ipynb
 ```
