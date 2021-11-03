@@ -5,6 +5,8 @@ Using the Stockfish engine, we demonstrate that due to the extremely large state
 
 This repository is part of Mason Leon and Naveen Kumar Chiluka's final report for Dr. Lawson L.S. Wong's graduate-level Fall 2019 CS 5100: Foundations of Artificial Intelligence course at Khoury College of Computer Sciences, Northeastern University, Boston, MA.
 
+Please visit the https://github.com/masonleon/ai-chess-agent/tree/master/reports to learn more about the project.
+
 ![](./reports/images/minimax_v_naiverand.gif)
 
 Before installing, you may find the following projects, libraries, and references used in this project of interest:
